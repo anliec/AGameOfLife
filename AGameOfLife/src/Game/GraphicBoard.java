@@ -13,17 +13,27 @@ public class GraphicBoard extends JPanel {
     private Board board;
     private int squareSize;
 
+    /**
+     * Default constructor: load the Board:"AGameOfLife/Boards/TestBoard1"
+     */
     public GraphicBoard(){
         init(new Board("AGameOfLife/Boards/TestBoard1", ' ', 5, 5));
     }
 
+    /**
+     * Main constructor
+     * @param sourceBoard the board that will be set as the board of the GraphicBoard
+     */
     public GraphicBoard(Board sourceBoard){
         init(sourceBoard);
     }
 
+    /**
+     * Do all the general initialisations tasks
+     * @param sourceBoard the board that will be set as the board of the GraphicBoard
+     */
     private void init(Board sourceBoard){
         board = sourceBoard;
-        setMinimumSize(new Dimension(100,100));
         addComponentListener(new ComponentAdapter() { //to get the resize event in order to keep squareSize updated
             @Override
             public void componentResized(ComponentEvent e) {
@@ -34,12 +44,20 @@ public class GraphicBoard extends JPanel {
         setSquareSize();// to be sure that squareSize is not zero
     }
 
+    /**
+     * Set the size of the square used to represent the cells
+     */
     public void setSquareSize(){
         double a = getSize().getHeight() / board.getHeight();
         double b = getSize().getWidth() / board.getWidth();
         squareSize = (int)(Math.min(a,b));
     }
 
+    /**
+     * Paint the actual representation of the board
+     * @param g Graphics witch will be used to paint the cells array
+     */
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
@@ -59,6 +77,11 @@ public class GraphicBoard extends JPanel {
         }
     }
 
+    /**
+     * Give the color witch is corresponding to a team
+     * @param cellTeam team number
+     * @return Color of the team
+     */
     public Color getTeamColor(int cellTeam){
         Color ret;
         switch (cellTeam){
@@ -74,16 +97,28 @@ public class GraphicBoard extends JPanel {
         return ret;
     }
 
+    /**
+     * Compute the abscissa of the origin
+     * @return the abscissa of the origin
+     */
     private int getAbscissaOrigin(){
         int cellWidth = squareSize * board.getWidth();
         return (getWidth()-cellWidth)/2;
     }
 
+    /**
+     * Compute the ordinate of the origin
+     * @return the ordinate of the origin
+     */
     private int getOrdinateOrigin(){
         int cellHeight= squareSize * board.getHeight();
         return (getHeight()-cellHeight)/2;
     }
 
+    /**
+     * Compute the coordinate of the origin
+     * @return the origin point
+     */
     private Point getOrigin(){
         return new Point(getAbscissaOrigin(),getOrdinateOrigin());
     }
