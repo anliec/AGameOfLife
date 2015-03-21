@@ -38,6 +38,8 @@ public class Board {
 
     public void setCellBoard(Cell[][] cellBoard) {
         this.cellBoard = cellBoard;
+        height = cellBoard.length;
+        width = cellBoard[0].length;
     }
 
     public Team[] getTeams() {
@@ -54,20 +56,17 @@ public class Board {
 	 * @param h height
 	 */
     public Board(int w, int h){
-        generationNumber = 0;
-        teams = new Team[2];
-        teams[0] = new Team(); teams[1] = new Team();
-        width = w;
-        height = h;
-        cellBoard = new Cell[height][width];
-        for (int i=0; i<height; i++) {
-            for (int j=0; j<width; j++) {
+        init();
+        Cell[][] cells = new Cell[h][w];
+        for (int i=0; i<h; i++) {
+            for (int j=0; j<w; j++) {
                 if(Math.random()<0.3) { // probability to have an alive cell = 0.3
-                    cellBoard[i][j]=new Cell((int)(Math.random()*2+1));
-                    teams[cellBoard[i][j].getTeam()-1].getCells().add(cellBoard[i][j]);
+                    cells[i][j]=new Cell((int)(Math.random()*2+1));
+                    teams[cells[i][j].getTeam()-1].getCells().add(cells[i][j]);
                 }
             }
         }
+        setCellBoard(cells);
     }
     
     /**
@@ -78,11 +77,8 @@ public class Board {
      * @param h height
      */
     public Board(String path, char sep, int w, int h) {
-        width = w;
-        height = h;
-        teams = new Team[2]; //number of teams : 2
-        teams[0] = new Team(); teams[1] = new Team();
-        cellBoard=new Cell[height][width];
+        init();
+        Cell[][] cells = new Cell[h][w];
         try {
             InputStream ips=new FileInputStream(path); 
             InputStreamReader ipsr=new InputStreamReader(ips);
@@ -95,11 +91,15 @@ public class Board {
                     if (line.charAt(a) == sep)
                         j++;
                     else {
-                        int n = ((int)line.charAt(a))-48;
-                        if(n != 0) {
-                            cellBoard[i][j] = new Cell(n);
-                            teams[cellBoard[i][j].getTeam()-1].getCells().add(cellBoard[i][j]);
+                        int n;
+                        try {
+                            n = Integer.parseInt(line.substring(a, a + 1) );
                         }
+                        catch (NumberFormatException e){
+                            n = 0; //if the value is not numeric, as an error we set it to zero
+                        }
+                        cells[i][j] = new Cell(n);
+                        teams[cells[i][j].getTeam()].getCells().add(cells[i][j]);
                     }
                 }
                 i++;
@@ -111,6 +111,16 @@ public class Board {
         }catch (IOException e){
             e.printStackTrace();
         }
+        setCellBoard(cells);
+    }
+
+    /**
+     * Do all the general initialisations tasks
+     */
+    private void init(){
+        generationNumber = 0;
+        teams = new Team[3]; //number of teams : 2 + 1 (dead cell team)
+        teams[0] = new Team(); teams[1] = new Team(); teams[2] = new Team();
     }
     
     /**
@@ -121,7 +131,7 @@ public class Board {
         for(int i=0; i<height; i++){
             System.out.print("\n"+sep);
             for(int j=0; j<width; j++) {
-                if(cellBoard[i][j]==null)
+                if(cellBoard[i][j].getTeam()==0)
                     System.out.print("-"+sep);
                 else {
                     System.out.print(cellBoard[i][j]);
@@ -132,7 +142,7 @@ public class Board {
     }
     
     public static void main(String args[]) {
-        Board board = new Board("Boards/TestBoard1", ' ', 5, 5);
+        Board board = new Board("AGameOfLife/Boards/TestBoard1", ' ', 5, 5);
         board.printConsoleBoard(' ');
     }
 }
