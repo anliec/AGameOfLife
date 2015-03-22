@@ -64,8 +64,7 @@ public class Board {
 	 * @param h height
 	 */
     public Board(int w, int h){
-        init();
-        setCellBoard(randomBoard(w,h,0.3));
+        init(randomBoard(w,h,0.3));
     }
     
     /**
@@ -76,7 +75,6 @@ public class Board {
      * @param h height
      */
     public Board(String path, char sep, int w, int h) {
-        init();
         Cell[][] cells = new Cell[h][w];
         try {
             InputStream ips=new FileInputStream(path); 
@@ -111,14 +109,16 @@ public class Board {
             e.printStackTrace();
             cells = randomBoard(w,h,0.3); //if there are an error when reading the file we get a random board...
         }
-        setCellBoard(cells);
+        init(cells);
     }
 
     /**
      * Do all the general initialisations tasks
+     * @param cells cells array witch will be set as cellBoard
      */
-    private void init(){
+    private void init(Cell[][] cells){
         generationNumber = 0;
+        setCellBoard(cells);
     }
 
     /**
