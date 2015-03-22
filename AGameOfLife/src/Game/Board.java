@@ -65,14 +65,6 @@ public class Board {
 	 */
     public Board(int w, int h){
         init();
-        Cell[][] cells = new Cell[h][w];
-        for (int i=0; i<h; i++) {
-            for (int j=0; j<w; j++) {
-                if(Math.random()<0.3) { // probability to have an alive cell = 0.3
-                    cells[i][j]=new Cell((int)(Math.random()*2+1));
-                }
-            }
-        }
         setCellBoard(randomBoard(w,h,0.3));
     }
     
