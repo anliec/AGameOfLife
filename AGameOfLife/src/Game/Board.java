@@ -142,7 +142,7 @@ public class Board {
     }
     
     public static void main(String args[]) {
-        Board board = new Board("AGameOfLife/Boards/TestBoard1", ' ', 5, 5);
+        Board board = new Board("Boards/TestBoard1", ' ', 5, 5);
         board.printConsoleBoard(' ');
     }
 }

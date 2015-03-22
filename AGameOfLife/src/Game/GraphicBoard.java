@@ -17,7 +17,7 @@ public class GraphicBoard extends JPanel {
      * Default constructor: load the Board:"AGameOfLife/Boards/TestBoard1"
      */
     public GraphicBoard(){
-        init(new Board("AGameOfLife/Boards/TestBoard1", ' ', 5, 5));
+        init(new Board("Boards/TestBoard1", ' ', 5, 5));
     }
 
     /**
