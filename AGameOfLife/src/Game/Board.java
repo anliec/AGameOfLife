@@ -40,6 +40,14 @@ public class Board {
         this.cellBoard = cellBoard;
         height = cellBoard.length;
         width = cellBoard[0].length;
+        //clean up the teams:
+        teams = new Team[3]; //number of teams : 2 + 1 (dead cell team)
+        teams[0] = new Team(); teams[1] = new Team(); teams[2] = new Team();
+        for (int i=0; i<height; i++) {//put the team as they must be
+            for (int j=0; j<width; j++) {
+                teams[cellBoard[i][j].getTeam()].getCells().add(cellBoard[i][j]);
+            }
+        }
     }
 
     public Team[] getTeams() {
@@ -62,11 +70,10 @@ public class Board {
             for (int j=0; j<w; j++) {
                 if(Math.random()<0.3) { // probability to have an alive cell = 0.3
                     cells[i][j]=new Cell((int)(Math.random()*2+1));
-                    teams[cells[i][j].getTeam()-1].getCells().add(cells[i][j]);
                 }
             }
         }
-        setCellBoard(cells);
+        setCellBoard(randomBoard(w,h,0.3));
     }
     
     /**
@@ -99,7 +106,6 @@ public class Board {
                             n = 0; //if the value is not numeric, as an error we set it to zero
                         }
                         cells[i][j] = new Cell(n);
-                        teams[cells[i][j].getTeam()].getCells().add(cells[i][j]);
                     }
                 }
                 i++;
@@ -108,8 +114,10 @@ public class Board {
             
         }catch (FileNotFoundException e) {
             e.printStackTrace();
+            cells = randomBoard(w,h,0.3); //if there are an error when reading the file we get a random board...
         }catch (IOException e){
             e.printStackTrace();
+            cells = randomBoard(w,h,0.3); //if there are an error when reading the file we get a random board...
         }
         setCellBoard(cells);
     }
@@ -119,8 +127,28 @@ public class Board {
      */
     private void init(){
         generationNumber = 0;
-        teams = new Team[3]; //number of teams : 2 + 1 (dead cell team)
-        teams[0] = new Team(); teams[1] = new Team(); teams[2] = new Team();
+    }
+
+    /**
+     * Generate a random board from the given arguments
+     * @param width width of the board
+     * @param height height of the board
+     * @param probability probability of a cell to be alive
+     * @return a board randomly generated
+     */
+    public Cell[][] randomBoard(int width, int height, double probability){
+        Cell[][] cells = new Cell[height][width];
+        for (int i=0; i<height; i++) {
+            for (int j=0; j<width; j++) {
+                if(Math.random()<probability) { // probability to have an alive cell
+                    cells[i][j]=new Cell((int)(Math.random()*2+1));
+                }
+                else{
+                    cells[i][j]=new Cell(0);
+                }
+            }
+        }
+        return cells;
     }
     
     /**
