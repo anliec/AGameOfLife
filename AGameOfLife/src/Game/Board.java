@@ -193,10 +193,9 @@ public class Board {
         else if(yMin<0){
             yMin = 0;
         }
-
         for (int x = xMin; x <= xMax; x++) {
             for (int y = yMin; y < yMax; y++) {
-                if(x!=cellX && y!=cellY){
+                if(x!=cellX && y!=cellY && cellBoard[x][y].getTeam() !=0){
                     neighbourCount++;
                 }
             }
