@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 
 public class Board {
 
+	private int generationNumber;
 	private int width;
 	private int height;
 	private Cell[][] cellBoard;
