@@ -8,7 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class Board {
-
+	
+	private int test;
 	private int generationNumber;
 	private int width;
 	private int height;
