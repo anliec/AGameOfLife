@@ -59,6 +59,21 @@ public class Board {
         this.teams = teams;
     }
 
+    public Cell getCell(int x,int y){
+        if(x>=0 && x<width && y>=0 && y<height){
+            return cellBoard[x][y];
+        }
+        else{
+            return new Cell(0);//return a dead cell if it's out of the board
+        }
+    }
+
+    public void setCell(int x, int y, Cell cell){
+        if(x>=0 && x<width && y>=0 && y<height){
+            cellBoard[x][y] = cell;
+        }
+    }
+
     /**
 	 * random generator
 	 * @param w width
