@@ -161,7 +161,34 @@ public class Board {
             }
         }
     }
-    
+
+    public int cellNeighbour(int cellX, int cellY){
+        int xMax = cellX+1, xMin = cellX-1;
+        int yMax = cellY+1, yMin = cellY-1;
+        int neighbourCount = 0;
+        if(xMax>cellBoard[0].length){
+            xMax = cellBoard[0].length;
+        }
+        else if(xMin<0){
+            xMin = 0;
+        }
+        if(yMax>cellBoard.length){
+            yMax = cellBoard.length;
+        }
+        else if(yMin<0){
+            yMin = 0;
+        }
+
+        for (int x = xMin; x <= xMax; x++) {
+            for (int y = yMin; y < yMax; y++) {
+                if(x!=cellX && y!=cellY){
+                    neighbourCount++;
+                }
+            }
+        }
+        return neighbourCount;
+    }
+
     public static void main(String args[]) {
         Board board = new Board("Boards/TestBoard1", ' ', 5, 5);
         board.printConsoleBoard(' ');
