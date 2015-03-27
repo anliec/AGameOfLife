@@ -3,7 +3,7 @@ package Game;
 public class Cell {
     int x; // colonne
     int y; // ligne
-    int team;//0 : sans équipe, 1 : équipe 1, 2 : équipe 2, etc...
+    int team;//0 : sans ï¿½quipe, 1 : ï¿½quipe 1, 2 : ï¿½quipe 2, etc...
 
     /**
      * standart generator with team assignement
@@ -23,6 +23,10 @@ public class Cell {
     
     public String toString() {
         return Integer.toString(team);
+    }
+
+    public boolean isAlive(){
+        return team!=0;
     }
 
 }
