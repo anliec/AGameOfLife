@@ -1,11 +1,14 @@
 package Game;
 
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
 
 public class Board {
 
@@ -60,7 +63,7 @@ public class Board {
 
     public Cell getCell(int x,int y){
         if(x>=0 && x<width && y>=0 && y<height){
-            return cellBoard[x][y];
+            return cellBoard[y][x];
         }
         else{
             return new Cell(0);//return a dead cell if it's out of the board
@@ -69,7 +72,9 @@ public class Board {
 
     public void setCell(int x, int y, Cell cell){
         if(x>=0 && x<width && y>=0 && y<height){
-            cellBoard[x][y] = cell;
+            teams[cellBoard[y][x].getTeam()].getCells().remove(cellBoard[y][x]);//remove the cell from it currant team
+            cellBoard[y][x] = cell;//set the new cell
+            teams[cellBoard[y][x].getTeam()].getCells().add(cellBoard[y][x]);//add the new cell in is new team
         }
     }
 
@@ -176,34 +181,126 @@ public class Board {
         }
     }
 
-    public int cellNeighbour(int cellX, int cellY){
-        int xMax = cellX+1, xMin = cellX-1;
-        int yMax = cellY+1, yMin = cellY-1;
-        int neighbourCount = 0;
-        if(xMax>cellBoard[0].length){
-            xMax = cellBoard[0].length;
+    /**
+     * @param cellX abscissa position of the cell
+     * @param cellY ordinate position of the cell
+     * @param countTeam team number of th cell that will be counted
+     * @param radius radius around the cell witch will be scanned
+     * @return number of cell around the given position belonging to to team given on a given radius
+     */
+    public  int cellExtendedNeighbour(int cellX, int cellY, int countTeam, int radius){
+        if(radius<1){ //a little check...
+            return 0;
         }
-        else if(xMin<0){
+        int xMax = cellX+radius, xMin = cellX-radius;
+        int yMax = cellY+radius, yMin = cellY-radius;
+        int neighbourCount = 0;
+        if(xMax>=cellBoard[0].length){
+            xMax = cellBoard[0].length-1;
+        }
+        if(xMin<0){
             xMin = 0;
         }
-        if(yMax>cellBoard.length){
-            yMax = cellBoard.length;
+        if(yMax>=cellBoard.length){
+            yMax = cellBoard.length-1;
         }
-        else if(yMin<0){
+        if(yMin<0){
             yMin = 0;
         }
         for (int x = xMin; x <= xMax; x++) {
-            for (int y = yMin; y < yMax; y++) {
-                if(x!=cellX && y!=cellY && cellBoard[x][y].getTeam() !=0){
+            for (int y = yMin; y <= yMax; y++) {
+                if(!(x==cellX && y==cellY) && cellBoard[y][x].getTeam()==countTeam){
                     neighbourCount++;
                 }
             }
         }
+        if(countTeam==0){
+            neighbourCount = ((xMax-xMin+1)*(yMax-yMin+1))-1-neighbourCount;//if neighbourCount is the number of zero then the number of neighbour is the number of cells minus neighbourCount
+        }
         return neighbourCount;
+    }
+
+    /**
+     * @param cellX abscissa position of the cell
+     * @param cellY ordinate position of the cell
+     * @param countTeam team number of th cell that will be counted
+     * @return number of cell around the given position belonging to to team given on a radius of 1
+     */
+    public int cellNeighbour(int cellX, int cellY, int countTeam){
+        return cellExtendedNeighbour(cellX,cellY,countTeam,1);
+    }
+
+    /**
+     * @param cellX abscissa position of the cell
+     * @param cellY ordinate position of the cell
+     * @return number of cell around the given position on a radius of 1
+     */
+    public int cellNeighbour(int cellX, int cellY){
+        return cellNeighbour(cellX,cellY,0);
+    }
+
+    /**
+     * Compute the next generation of the board
+     */
+    public void computeNextGeneration(){
+        Cell[][] newBoard = new Cell[cellBoard.length][cellBoard[0].length];
+        for (int y = 0; y < cellBoard[0].length; y++) {
+            for (int x = 0; x < cellBoard.length; x++) {
+                int neighbour = cellNeighbour(x,y);
+                newBoard[y][x] = new Cell(0);
+                if(getCell(x,y).isAlive()){
+                    if(neighbour<=1){
+                        //under-population: the cell died
+                    }
+                    else if(neighbour<=3){
+                        newBoard[y][x] = cellBoard[y][x];//nothing change
+                    }
+                    else{
+                        //overcrowding: the cell died
+                    }
+                }
+                else{
+                    if(neighbour==3){
+                        //a new cell come, by reproduction
+                        int newCellTeam = 0;
+                        int r = 1;
+                        boolean unSetCase = true;
+                        while(unSetCase && r<10){
+                            int max = 0;
+                            for (int i = 1; i < teams.length; i++) {
+                                int curNeighbour = cellExtendedNeighbour(x, y, i, r);
+                                if(max == curNeighbour){
+                                    unSetCase = true;
+                                }
+                                else if(max < curNeighbour){
+                                    max = curNeighbour;
+                                    unSetCase = false;
+                                    newCellTeam = i;
+                                }
+                            }
+                            r++;
+                        }
+                        if(unSetCase){
+                            newCellTeam = (int)(Math.random()*teams.length+1.0);
+                        }
+                        newBoard[y][x] = new Cell(newCellTeam);
+                    }
+                    else{
+                        newBoard[y][x] = cellBoard[y][x];//nothing change, the cell is still dead
+                    }
+                }
+
+            }
+        }
+        generationNumber++;
+        setCellBoard(newBoard);
     }
 
     public static void main(String args[]) {
         Board board = new Board("Boards/TestBoard1", ' ', 5, 5);
+        board.printConsoleBoard(' ');
+        System.out.println("\n");
+        board.computeNextGeneration();
         board.printConsoleBoard(' ');
     }
 }
