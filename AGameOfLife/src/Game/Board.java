@@ -61,10 +61,19 @@ public class Board {
         this.teams = teams;
     }
 
+    /**
+     * @param cellCoordinates coordinates of the cell on the board
+     * @return the cell at the given coordinates on the board
+     */
     public Cell getCell(BoardPoint cellCoordinates){
         return getCell(cellCoordinates.getX(),cellCoordinates.getY());
     }
 
+    /**
+     * @param x abscissa position of the cell on the board
+     * @param y ordinate position of the cell on the board
+     * @return the cell at the given coordinates on the board
+     */
     public Cell getCell(int x,int y){
         if(x>=0 && x<width && y>=0 && y<height){
             return cellBoard[y][x];
@@ -74,10 +83,21 @@ public class Board {
         }
     }
 
+    /**
+     * put the given cell at the given coordinates
+     * @param cellCoordinates coordinates of the cell on the board
+     * @param cell
+     */
     public void setCell(BoardPoint cellCoordinates, Cell cell){
         setCell(cellCoordinates.getX(),cellCoordinates.getY(),cell);
     }
 
+    /**
+     * put the given cell at the given coordinates
+     * @param x abscissa position of the cell on the board
+     * @param y ordinate position of the cell on the board
+     * @param cell
+     */
     public void setCell(int x, int y, Cell cell){
         if(x>=0 && x<width && y>=0 && y<height){
             teams[cellBoard[y][x].getTeam()].getCells().remove(cellBoard[y][x]);//remove the cell from it currant team
@@ -247,6 +267,11 @@ public class Board {
         return cellNeighbour(cellX,cellY,0);
     }
 
+    /**
+     * @param A a point in board coordinates
+     * @param B a point in board coordinates
+     * @return the radius between this two point if the two of them are on the board else return -1
+     */
     public int radiusBetween(BoardPoint A,BoardPoint B){
         if(isOnBoard(A) && isOnBoard(B)){
             return Math.max(Math.abs(A.getX()-B.getX()),Math.abs(A.getY()-B.getY()));
@@ -256,6 +281,10 @@ public class Board {
         }
     }
 
+    /**
+     * @param A a point in board coordinates
+     * @return true if the coordinates aren't out of the board
+     */
     public boolean isOnBoard(BoardPoint A){
         return A.getX()>=0 && A.getY()>=0 && A.getX()<cellBoard[0].length && A.getY()<cellBoard.length;
     }

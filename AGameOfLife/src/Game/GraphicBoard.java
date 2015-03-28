@@ -89,10 +89,19 @@ public class GraphicBoard extends JPanel {
         setSquareSize();// to be sure that squareSize is not zero
     }
 
+    /**
+     * @param cellCoordinates coordinates of the cell
+     * @return if the cell is set, return true and false if the cell is out of the board
+     */
     public boolean setSelectedCell(BoardPoint cellCoordinates){
         return setSelectedCell(cellCoordinates.getX(),cellCoordinates.getY());
     }
 
+    /**
+     * @param cellX abscissa position of the cell
+     * @param cellY ordinate position of the cell
+     * @return if the cell is set, return true and false if the cell is out of the board
+     */
     public boolean setSelectedCell(int cellX, int cellY){
         if(cellX>=0&&cellY>=0&&cellX<board.getWidth()&&cellY<board.getHeight()){
             selectedCell.setY(cellY);
@@ -105,15 +114,25 @@ public class GraphicBoard extends JPanel {
         }
     }
 
+    /**
+     * unselect the currently selected cell
+     */
     public void unselectCell(){
         selectedCell.setY(-1);
         selectedCell.setY(-1);
     }
 
+    /**
+     * @return true if a cell is selected
+     */
     public boolean isACellSelected(){
         return selectedCell.getX()!=-1 && selectedCell.getY()!=-1;
     }
 
+    /**
+     * @param mousePositionOnJPanel coordinate of a point on the JPanel
+     * @return coordinate of a cell on the board or (-1,-1) if there are no cell there
+     */
     public BoardPoint mouseToBoard(Point mousePositionOnJPanel){
         Point origin = getOrigin();
         int x = mousePositionOnJPanel.x - origin.x;
@@ -160,7 +179,7 @@ public class GraphicBoard extends JPanel {
             }
         }
         if(isACellSelected()){
-            g2d.setColor( new Color(0,200,0) );
+            g2d.setColor(new Color(0, 200, 0));
             g2d.drawRect(origin.x + selectedCell.getX() * squareSize, origin.y + selectedCell.getY() * squareSize, squareSize, squareSize);
         }
     }
@@ -211,6 +230,9 @@ public class GraphicBoard extends JPanel {
         return new Point(getAbscissaOrigin(),getOrdinateOrigin());
     }
 
+    /**
+     * say to the board to compute the next generation of cell and then draw it
+     */
     public void computeNextGeneration(){
         board.computeNextGeneration();
         repaint();
