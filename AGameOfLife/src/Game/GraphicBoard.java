@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * Created by nicolas on 21/03/15.
@@ -12,6 +14,7 @@ public class GraphicBoard extends JPanel {
 
     private Board board;
     private int squareSize;
+    private BoardPoint selectedCell;
 
     /**
      * Default constructor: load the Board:"AGameOfLife/Boards/TestBoard1"
@@ -41,8 +44,89 @@ public class GraphicBoard extends JPanel {
                 setSquareSize();
             }
         });
+        addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                switch (mouseEvent.getButton()){
+                    case MouseEvent.BUTTON1:
+                        setSelectedCell(mouseToBoard(mouseEvent.getPoint()));
+                        break;
+                    case MouseEvent.BUTTON3:
+                        if(isACellSelected()){
+                            BoardPoint pointOnBoard = mouseToBoard(mouseEvent.getPoint());
+                            if(board.radiusBetween(pointOnBoard,selectedCell)==1 && !board.getCell(pointOnBoard).isAlive() && board.getCell(selectedCell).isAlive()){
+                                board.setCell(pointOnBoard,board.getCell(selectedCell));
+                                board.setCell(selectedCell,new Cell(0));
+                                setSelectedCell(pointOnBoard);
+                            }
+                        }
+                        break;
+                }
+                repaint();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+
+            }
+        });
+        selectedCell = new BoardPoint(-1,-1);
         setSquareSize();// to be sure that squareSize is not zero
     }
+
+    public boolean setSelectedCell(BoardPoint cellCoordinates){
+        return setSelectedCell(cellCoordinates.getX(),cellCoordinates.getY());
+    }
+
+    public boolean setSelectedCell(int cellX, int cellY){
+        if(cellX>=0&&cellY>=0&&cellX<board.getWidth()&&cellY<board.getHeight()){
+            selectedCell.setY(cellY);
+            selectedCell.setX(cellX);
+            return true;
+        }
+        else{
+            unselectCell();
+            return false; //if the cell is not on the board
+        }
+    }
+
+    public void unselectCell(){
+        selectedCell.setY(-1);
+        selectedCell.setY(-1);
+    }
+
+    public boolean isACellSelected(){
+        return selectedCell.getX()!=-1 && selectedCell.getY()!=-1;
+    }
+
+    public BoardPoint mouseToBoard(Point mousePositionOnJPanel){
+        Point origin = getOrigin();
+        int x = mousePositionOnJPanel.x - origin.x;
+        int y = mousePositionOnJPanel.y - origin.y;
+        if(x>=0&&y>=0&&x<=board.getWidth()*squareSize&&y<=board.getHeight()*squareSize){
+            return new BoardPoint(x/squareSize , y/squareSize );
+        }
+        else{
+            return new BoardPoint(-1,-1);
+        }
+
+    }
+
 
     /**
      * Set the size of the square used to represent the cells
@@ -74,6 +158,10 @@ public class GraphicBoard extends JPanel {
                 g2d.setColor( cellColor );
                 g2d.fillRect(origin.x+x*squareSize,origin.y+y*squareSize,squareSize,squareSize);
             }
+        }
+        if(isACellSelected()){
+            g2d.setColor( new Color(0,200,0) );
+            g2d.drawRect(origin.x + selectedCell.getX() * squareSize, origin.y + selectedCell.getY() * squareSize, squareSize, squareSize);
         }
     }
 
@@ -121,6 +209,11 @@ public class GraphicBoard extends JPanel {
      */
     private Point getOrigin(){
         return new Point(getAbscissaOrigin(),getOrdinateOrigin());
+    }
+
+    public void computeNextGeneration(){
+        board.computeNextGeneration();
+        repaint();
     }
 
 }

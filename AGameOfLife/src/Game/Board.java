@@ -61,6 +61,10 @@ public class Board {
         this.teams = teams;
     }
 
+    public Cell getCell(BoardPoint cellCoordinates){
+        return getCell(cellCoordinates.getX(),cellCoordinates.getY());
+    }
+
     public Cell getCell(int x,int y){
         if(x>=0 && x<width && y>=0 && y<height){
             return cellBoard[y][x];
@@ -68,6 +72,10 @@ public class Board {
         else{
             return new Cell(0);//return a dead cell if it's out of the board
         }
+    }
+
+    public void setCell(BoardPoint cellCoordinates, Cell cell){
+        setCell(cellCoordinates.getX(),cellCoordinates.getY(),cell);
     }
 
     public void setCell(int x, int y, Cell cell){
@@ -237,6 +245,19 @@ public class Board {
      */
     public int cellNeighbour(int cellX, int cellY){
         return cellNeighbour(cellX,cellY,0);
+    }
+
+    public int radiusBetween(BoardPoint A,BoardPoint B){
+        if(isOnBoard(A) && isOnBoard(B)){
+            return Math.max(Math.abs(A.getX()-B.getX()),Math.abs(A.getY()-B.getY()));
+        }
+        else{
+            return -1;
+        }
+    }
+
+    public boolean isOnBoard(BoardPoint A){
+        return A.getX()>=0 && A.getY()>=0 && A.getX()<cellBoard[0].length && A.getY()<cellBoard.length;
     }
 
     /**
