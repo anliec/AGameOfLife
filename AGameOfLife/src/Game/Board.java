@@ -123,12 +123,32 @@ public class Board {
      * @param h height
      */
     public Board(String path, char sep, int w, int h) {
-        Cell[][] cells = new Cell[h][w];
+        loadBoardFromFile(path,sep,w,h);
+    }
+
+    /**
+     * @param path file path
+     * @param sep separator between numbers
+     */
+    public Board(String path, char sep){
+        loadBoardFromFile(path,sep,getBoardWidthFromFile(path,sep),getBoardHeightFromFile(path));
+    }
+
+    /**
+     * @param path file path
+     * @param sep separator between numbers
+     * @param boardWidth width size of the board to load
+     * @param boardHeight height size of the board to load
+     */
+    public void loadBoardFromFile(String path, char sep, int boardWidth, int boardHeight){
+        Cell[][] cells;
         try {
-            InputStream ips=new FileInputStream(path); 
+            InputStream ips=new FileInputStream(path);
             InputStreamReader ipsr=new InputStreamReader(ips);
             BufferedReader br=new BufferedReader(ipsr);
             int i=0;
+            //read the file:
+            cells = new Cell[boardHeight][boardWidth];
             String line;
             while ((line=br.readLine())!=null){
                 int j=0;
@@ -149,15 +169,69 @@ public class Board {
                 i++;
             }
             br.close();
-            
+
         }catch (FileNotFoundException e) {
             e.printStackTrace();
-            cells = randomBoard(w,h,0.3); //if there are an error when reading the file we get a random board...
+            cells = randomBoard(10,10,0.5); //if there are an error when reading the file we get a random board...
         }catch (IOException e){
             e.printStackTrace();
-            cells = randomBoard(w,h,0.3); //if there are an error when reading the file we get a random board...
+            cells = randomBoard(10,10,0.5); //if there are an error when reading the file we get a random board...
         }
         init(cells);
+    }
+
+    /**
+     * @param path file path
+     * @param sep separator between numbers
+     * @return number of value on the first line of the file
+     */
+    public int getBoardWidthFromFile(String path, char sep){
+        int w=0;
+        try {
+            InputStream ips=new FileInputStream(path);
+            InputStreamReader ipsr=new InputStreamReader(ips);
+            BufferedReader br=new BufferedReader(ipsr);
+            boolean wasSeparator = true;
+            int curChar;
+            while((curChar=br.read())!='\n'){
+                if(curChar!=sep && wasSeparator){
+                    w++;
+                    wasSeparator = false;
+                }
+                else if (curChar==sep){
+                    wasSeparator = true;
+                }
+            }
+            br.close();
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return w;
+    }
+
+    /**
+     * @param path file path
+     * @return number of line on the file
+     */
+    public int getBoardHeightFromFile(String path){
+        int h = 0;
+        try {
+            InputStream ips=new FileInputStream(path);
+            InputStreamReader ipsr=new InputStreamReader(ips);
+            BufferedReader br=new BufferedReader(ipsr);
+            while((br.readLine())!=null){
+                h++;
+            }
+            br.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return h;
     }
 
     /**
@@ -294,8 +368,8 @@ public class Board {
      */
     public void computeNextGeneration(){
         Cell[][] newBoard = new Cell[cellBoard.length][cellBoard[0].length];
-        for (int y = 0; y < cellBoard[0].length; y++) {
-            for (int x = 0; x < cellBoard.length; x++) {
+        for (int y = 0; y < cellBoard.length; y++) {
+            for (int x = 0; x < cellBoard[0].length; x++) {
                 int neighbour = cellNeighbour(x,y);
                 newBoard[y][x] = new Cell(0);
                 if(getCell(x,y).isAlive()){
