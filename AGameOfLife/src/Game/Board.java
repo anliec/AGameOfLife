@@ -1,21 +1,19 @@
 package Game;
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
 
 public class Board {
 
 	private int generationNumber;
 	private int width;
 	private int height;
-    private int currentHumanPlayer;
+    private int currentPlayer;
+    private int teamHumanPlayer;
 	private Cell[][] cellBoard;
 	private Team[] teams;
 
@@ -46,7 +44,9 @@ public class Board {
         width = cellBoard[0].length;
         //clean up the teams:
         teams = new Team[3]; //number of teams : 2 + 1 (dead cell team)
-        teams[0] = new Team(); teams[1] = new Team(); teams[2] = new Team();
+        for (int i = 0; i < teams.length; i++) {
+            teams[i]= new Team(i!=teamHumanPlayer);
+        }
         for (int i=0; i<height; i++) {//put the team as they must be
             for (int j=0; j<width; j++) {
                 teams[cellBoard[i][j].getTeam()].getCells().add(cellBoard[i][j]);
@@ -241,7 +241,8 @@ public class Board {
      */
     private void init(Cell[][] cells){
         generationNumber = 0;
-        currentHumanPlayer = 1;
+        currentPlayer = 1;
+        teamHumanPlayer = 1;
         setCellBoard(cells);
     }
 
@@ -423,7 +424,7 @@ public class Board {
     }
 
     public boolean moveCell(BoardPoint from, BoardPoint to){
-        if(radiusBetween(from,to) == 1 && getCell(from).getTeam() == currentHumanPlayer && !getCell(to).isAlive() ){
+        if(radiusBetween(from,to) == 1 && getCell(from).getTeam() == currentPlayer && !getCell(to).isAlive() ){
             setCell(to,getCell(from));
             setCell(from,new Cell(0));
             return true;
@@ -432,8 +433,37 @@ public class Board {
             return false;
     }
 
-    public void endTheHumanPlayerTurn(){
-        /*to do*/
+    public void endHumanPlayerTurn(){
+        if(isHumanPlayerPlaying()){
+            endCurrentTurn();
+        }
+    }
+
+    public void endCurrentTurn(){
+        currentPlayer++;
+        if(currentPlayer<teams.length){
+            playCurrentTurn();
+        }
+        else{
+            nextTurn();
+        }
+    }
+
+    public void playCurrentTurn(){
+        if(teams[currentPlayer].isIA()){
+            teams[currentPlayer].play();
+            endCurrentTurn();
+        }
+    }
+
+    public void nextTurn(){
+        computeNextGeneration();
+        currentPlayer = 1;
+        playCurrentTurn();
+    }
+
+    public boolean isHumanPlayerPlaying(){
+        return currentPlayer==teamHumanPlayer;
     }
 
     public static void main(String args[]) {

@@ -22,16 +22,16 @@ public class MainWindows extends JFrame {
         BoardWidget = new GraphicBoard();
         BoardWidget.setPreferredSize(new Dimension(300, 300));
         add(BoardWidget, BorderLayout.CENTER);
-        BtNextGeneration = new Button("Next Generation");
+        BtNextGeneration = new Button("End Turn");
         add(BtNextGeneration, BorderLayout.SOUTH);
 
         ///actionListener
-        BtNextGeneration.setActionCommand("ComputeNextGeneration");
+        BtNextGeneration.setActionCommand("EndOfHumanTurn");
         BtNextGeneration.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if("ComputeNextGeneration".equals(actionEvent.getActionCommand())){
-                    BoardWidget.computeNextGeneration();
+                if("EndOfHumanTurn".equals(actionEvent.getActionCommand())){
+                    BoardWidget.getBoard().endHumanPlayerTurn();
                 }
             }
         });

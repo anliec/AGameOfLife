@@ -12,6 +12,10 @@ import java.awt.event.MouseListener;
  */
 public class GraphicBoard extends JPanel {
 
+    public Board getBoard() {
+        return board;
+    }
+
     private Board board;
     private int squareSize;
     private BoardPoint selectedCell;
@@ -228,12 +232,5 @@ public class GraphicBoard extends JPanel {
         return new Point(getAbscissaOrigin(),getOrdinateOrigin());
     }
 
-    /**
-     * say to the board to compute the next generation of cell and then draw it
-     */
-    public void computeNextGeneration(){
-        board.computeNextGeneration();
-        repaint();
-    }
 
 }
