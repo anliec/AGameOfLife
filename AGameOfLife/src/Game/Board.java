@@ -15,6 +15,7 @@ public class Board {
 	private int generationNumber;
 	private int width;
 	private int height;
+    private int currentHumanPlayer;
 	private Cell[][] cellBoard;
 	private Team[] teams;
 
@@ -240,6 +241,7 @@ public class Board {
      */
     private void init(Cell[][] cells){
         generationNumber = 0;
+        currentHumanPlayer = 1;
         setCellBoard(cells);
     }
 
@@ -418,6 +420,20 @@ public class Board {
         }
         generationNumber++;
         setCellBoard(newBoard);
+    }
+
+    public boolean moveCell(BoardPoint from, BoardPoint to){
+        if(radiusBetween(from,to) == 1 && getCell(from).getTeam() == currentHumanPlayer && !getCell(to).isAlive() ){
+            setCell(to,getCell(from));
+            setCell(from,new Cell(0));
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public void endTheHumanPlayerTurn(){
+        /*to do*/
     }
 
     public static void main(String args[]) {
