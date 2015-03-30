@@ -9,6 +9,12 @@ public class Team {
     
     public Team() {
         cells = new ArrayList<Cell>();
+        IA=false;
+    }
+    
+    public Team(boolean IA) {
+        cells = new ArrayList<Cell>();
+        this.IA = IA;
     }
     
     public boolean isIA() {return IA;}
@@ -20,6 +26,9 @@ public class Team {
     public void play() {
         if (IA){
             playIA();
+        }
+        else {
+            
         }
     }
     
@@ -33,13 +42,49 @@ public class Team {
                     if(x >=0 && y >=0 && x < board.getWidth() && y < board.getHeight()
                             && !board.getCell(x, y).isAlive()) {
                         int score = 0;
-                        
+                        Cell current = board.getCell(x, y);
+                        switch (board.cellNeighbour(x, y)) {
+                        case 2:
+                            score = 5;
+                            break;
+                        case 3:
+                            score = 10;
+                            break;
+                        case 4:
+                            score = 5;
+                            break;
+                        default:
+                            score = 0;
+                            break;
+                        }
+                        switch (board.cellExtendedNeighbour(x, y, 0, 2)) {
+                        case 6:
+                            score += 3;
+                            break;
+                        case 7:
+                            score += 4;
+                            break;
+                        case 8:
+                            score += 5;
+                            break;
+                        case 9:
+                            score += 4;
+                            break;
+                        case 10:
+                            score += 3;
+                            break;
+                        default:
+                            break;
+                        }
+                        moves.add(new Move(cells.get(i).getCoordinate(), new BoardPoint(x,y), score));
                     }
                 }
             }
         }
-        for(int i=0; i<moves.size(); i++) {
-            
+        Move finalMove = moves.get(0);
+        for(int i=1; i<moves.size(); i++) {
+            if(moves.get(i).score>finalMove.score)
+                finalMove = moves.get(i);
         }
     }
 
