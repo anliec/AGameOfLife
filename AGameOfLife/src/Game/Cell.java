@@ -1,16 +1,19 @@
 package Game;
 
 public class Cell {
-    int x; // colonne
-    int y; // ligne
+    BoardPoint coordinate;
     int team;//0 : sans �quipe, 1 : �quipe 1, 2 : �quipe 2, etc...
 
     /**
-     * standart generator with team assignement
+     * standard generator with team assignment
      * @param t team
      */
     public Cell(int t) {
         team = t;
+    }
+    
+    public BoardPoint getCoordinate() {
+        return coordinate;
     }
 
     public int getTeam() {
@@ -30,4 +33,3 @@ public class Cell {
     }
 
 }
-
