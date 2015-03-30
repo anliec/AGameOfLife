@@ -32,6 +32,10 @@ public class Team {
         }
     }
     
+    /**
+     * the IA make the best move she can
+     * @author Edern Haumont
+     */
     public void playIA() {
         ArrayList<Move> moves = new ArrayList<Move>();
         for(int i=0; i<cells.size(); i++) {
@@ -86,6 +90,7 @@ public class Team {
             if(moves.get(i).score>finalMove.score)
                 finalMove = moves.get(i);
         }
+        board.moveCell(finalMove.from, finalMove.to);
     }
 
 
