@@ -52,6 +52,7 @@ public class Board {
                 teams[cellBoard[i][j].getTeam()].getCells().add(cellBoard[i][j]);
             }
         }
+        resetCellCoordinate();
     }
 
     public Team[] getTeams() {
@@ -104,6 +105,7 @@ public class Board {
             teams[cellBoard[y][x].getTeam()].getCells().remove(cellBoard[y][x]);//remove the cell from it currant team
             cellBoard[y][x] = cell;//set the new cell
             teams[cellBoard[y][x].getTeam()].getCells().add(cellBoard[y][x]);//add the new cell in is new team
+            cellBoard[y][x].setCoordinate(new BoardPoint(x,y));
         }
     }
 
@@ -244,6 +246,14 @@ public class Board {
         currentPlayer = 1;
         teamHumanPlayer = 1;
         setCellBoard(cells);
+    }
+
+    public void resetCellCoordinate(){
+        for (int x = 0; x < cellBoard[0].length; x++) {
+            for (int y = 0; y < cellBoard.length; y++) {
+                cellBoard[y][x].setCoordinate(new BoardPoint(x,y));
+            }
+        }
     }
 
     /**
