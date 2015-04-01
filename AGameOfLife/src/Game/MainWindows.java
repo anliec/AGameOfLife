@@ -32,6 +32,7 @@ public class MainWindows extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 if("EndOfHumanTurn".equals(actionEvent.getActionCommand())){
                     BoardWidget.getBoard().endHumanPlayerTurn();
+                    BoardWidget.repaint();
                 }
             }
         });

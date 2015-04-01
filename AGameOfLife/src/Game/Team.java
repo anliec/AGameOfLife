@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 public class Team {
     private ArrayList<Cell> cells;
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     private Board board;
     private boolean IA;
     
@@ -15,6 +20,12 @@ public class Team {
     public Team(boolean IA) {
         cells = new ArrayList<Cell>();
         this.IA = IA;
+    }
+
+    public Team(boolean IA, Board board){
+        cells = new ArrayList<Cell>();
+        this.IA = IA;
+        this.board = board;
     }
     
     public boolean isIA() {return IA;}
