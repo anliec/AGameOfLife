@@ -58,21 +58,18 @@ public class Team {
                             && !board.getCell(x, y).isAlive()) {
                         int score = 0;
                         Cell current = board.getCell(x, y);
-                        switch (board.cellNeighbour(x, y)) {
+                        switch (board.cellNeighbour(x, y)-1/*itself*/) {
                         case 2:
                             score = 5;
                             break;
                         case 3:
                             score = 10;
                             break;
-                        case 4:
-                            score = 5;
-                            break;
                         default:
                             score = 0;
                             break;
                         }
-                        switch (board.cellExtendedNeighbour(x, y, 0, 2)) {
+                        switch (board.cellExtendedNeighbour(x, y, 0, 2)-1/*itself*/) {
                         case 6:
                             score += 3;
                             break;
@@ -101,7 +98,10 @@ public class Team {
             if(moves.get(i).score>finalMove.score)
                 finalMove = moves.get(i);
         }
-        board.moveCell(finalMove.from, finalMove.to);
+        if(finalMove.score!=0) {
+            board.moveCell(finalMove.from, finalMove.to);
+            System.out.println(finalMove.score);
+        }
     }
 
 
