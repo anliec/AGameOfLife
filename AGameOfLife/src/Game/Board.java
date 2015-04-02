@@ -117,6 +117,10 @@ public class Board {
     public Board(int w, int h){
         init(randomBoard(w,h,0.3));
     }
+
+    public Board(Cell[][] cells){
+        init(cells);
+    }
     
     /**
      * 

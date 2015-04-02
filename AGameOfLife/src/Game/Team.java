@@ -57,8 +57,11 @@ public class Team {
                     if(x >=0 && y >=0 && x < board.getWidth() && y < board.getHeight()
                             && !board.getCell(x, y).isAlive()) {
                         int score = 0;
-                        Cell current = board.getCell(x, y);
-                        switch (board.cellNeighbour(x, y)-1/*itself*/) {
+                        //Cell current = board.getCell(x, y); //never used
+                        // move the cell on a temp board to be sure of the score result:
+                        Board tempBoard = new Board(board.getCellBoard().clone());
+                        tempBoard.moveCell(cells.get(i).getCoordinate(), new BoardPoint(x,y));
+                        switch (tempBoard.cellNeighbour(x, y)/*-1/*itself*/) { //useless, already counted on cellNeighbour
                         case 2:
                             score = 5;
                             break;
@@ -69,7 +72,7 @@ public class Team {
                             score = 0;
                             break;
                         }
-                        switch (board.cellExtendedNeighbour(x, y, 0, 2)-1/*itself*/) {
+                        switch (tempBoard.cellExtendedNeighbour(x, y, 0, 2)/*-1/*itself*/) { //useless, already counted on cellNeighbour
                         case 6:
                             score += 3;
                             break;
