@@ -110,6 +110,7 @@ public class OptionWindow extends JFrame{
         setVisible(true);
 	}
 	
+	//test
 	 public static void main (String args[]) {
          
          OptionWindow maFrame= new OptionWindow();
