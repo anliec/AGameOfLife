@@ -6,15 +6,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by nicolas on 21/03/15.
+ * class of the main window which contains the whole game
+ * @author team AGOL
  */
 public class MainWindows extends JFrame {
 
     GraphicBoard BoardWidget;
     Button BtNextGeneration;
+    String title;
 
+    /**
+     * default constructor
+     * @author team AGOL
+     */
     public MainWindows(){
-        setTitle("A Game Of Life");
+        title=("A Game of Life");
+        setTitle(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -34,6 +41,9 @@ public class MainWindows extends JFrame {
                     BoardWidget.getBoard().endHumanPlayerTurn();
                     BoardWidget.repaint();
                 }
+                title="A Game of Life";
+                title+=" - Player : "+BoardWidget.getBoard().getCurrentPlayer();
+                setTitle(title);
             }
         });
 
