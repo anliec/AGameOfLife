@@ -3,14 +3,14 @@ package Game;
 import java.util.ArrayList;
 
 public class Team {
-    private ArrayList<Cell> cells;
+    protected ArrayList<Cell> cells;
 
     public void setBoard(Board board) {
         this.board = board;
     }
 
-    private Board board;
-    private boolean IA;
+    protected Board board;
+    protected boolean IA;
     
     public Team() {
         cells = new ArrayList<Cell>();
@@ -107,5 +107,12 @@ public class Team {
         }
     }
 
-
+    public int getTeamNumber(){
+        if(!cells.isEmpty()){
+            return cells.get(0).getTeam();
+        }
+        else{
+            return -1; //no cells no team...
+        }
+    }
 }

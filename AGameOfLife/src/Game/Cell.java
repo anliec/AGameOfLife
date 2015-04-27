@@ -1,6 +1,6 @@
 package Game;
 
-public class Cell {
+public class Cell implements Cloneable{
 
 
     BoardPoint coordinate;
@@ -41,6 +41,19 @@ public class Cell {
 
     public boolean isAlive(){
         return team!=0;
+    }
+
+    public Cell clone(){
+        Cell cellCopy = null;
+        try{
+            cellCopy = (Cell)super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace(System.err);
+        }
+        cellCopy.setTeam(team);
+        cellCopy.setCoordinate(coordinate);
+        return cellCopy;
     }
 
 }

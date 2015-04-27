@@ -1,11 +1,12 @@
 package Game;
 
+
 import java.io.*;
 
 /**
  * Created by nicolas on 02/04/15.
  */
-public class BaseBoard {
+public class BaseBoard implements Cloneable {
 
     protected int generationNumber;
     protected int width;
@@ -23,6 +24,15 @@ public class BaseBoard {
     public int getHeight() {
         return height;
     }
+    private int currentPlayer;
+    private int teamHumanPlayer;
+	private Team[] teams;
+
+    public void setCellBoard(Cell[][] cellBoard) {
+        this.cellBoard = cellBoard;
+        height = cellBoard.length;
+        width = cellBoard[0].length;
+    }
 
     public void setHeight(int height) {
         this.height = height;
@@ -30,13 +40,6 @@ public class BaseBoard {
 
     public Cell[][] getCellBoard() {
         return cellBoard;
-    }
-
-    public void setCellBoard(Cell[][] cellBoard) {
-        this.cellBoard = cellBoard;
-        height = cellBoard.length;
-        width = cellBoard[0].length;
-        resetCellCoordinate();
     }
 
     /**
@@ -63,15 +66,6 @@ public class BaseBoard {
 
     /**
      * put the given cell at the given coordinates
-     * @param cellCoordinates coordinates of the cell on the board
-     * @param cell
-     */
-    public void setCell(BoardPoint cellCoordinates, Cell cell){
-        setCell(cellCoordinates.getX(),cellCoordinates.getY(),cell);
-    }
-
-    /**
-     * put the given cell at the given coordinates
      * @param x abscissa position of the cell on the board
      * @param y ordinate position of the cell on the board
      * @param cell
@@ -81,6 +75,10 @@ public class BaseBoard {
             cellBoard[y][x] = cell;//set the new cell
             cellBoard[y][x].setCoordinate(new BoardPoint(x,y));
         }
+    }
+
+    public void setCell(BoardPoint cellCoordinates, Cell cell){
+        setCell(cellCoordinates.getX(),cellCoordinates.getY(),cell);
     }
 
     /**
@@ -270,6 +268,7 @@ public class BaseBoard {
                 }
             }
         }
+        System.out.println();
     }
 
     /**
@@ -344,14 +343,32 @@ public class BaseBoard {
         }
     }
 
-
-
     /**
      * @param A a point in board coordinates
      * @return true if the coordinates aren't out of the board
      */
     public boolean isOnBoard(BoardPoint A){
         return A.getX()>=0 && A.getY()>=0 && A.getX()<cellBoard[0].length && A.getY()<cellBoard.length;
+    }
+
+    public BaseBoard clone(){
+        BaseBoard baseBoard = null;
+        try{
+            baseBoard = (BaseBoard)super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace(System.err);
+        }
+        Cell [][] cellBoardCopy = new Cell[height][width];
+        for (int x = 0; x < cellBoardCopy.length; x++) {
+            for (int y = 0; y < cellBoardCopy[0].length; y++) {
+                cellBoardCopy[x][y] = cellBoard[x][y];
+            }
+        }
+        baseBoard.setCellBoard(cellBoardCopy);
+        baseBoard.setHeight(height);
+        baseBoard.setWidth(width);
+        return baseBoard;
     }
 
 }

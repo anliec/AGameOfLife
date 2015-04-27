@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class Board extends BaseBoard{
+
+public class Board extends BaseBoard implements Cloneable{
 
     private int currentPlayer;
     private int teamHumanPlayer;
@@ -31,13 +32,22 @@ public class Board extends BaseBoard{
         this.teams = teams;
     }
 
+    public Team getTeam(int teamNumber){
+        if(teamNumber>=0 && teamNumber < teams.length){
+            return teams[teamNumber];
+        }
+        else{
+            return new Team();
+        }
+    }
+
     /**
      * do all the stuff to get clean teams
      */
     public void reloadTeams(){
         teams = new Team[3]; //number of teams : 2 + 1 (dead cell team)
         for (int i = 0; i < teams.length; i++) {
-            teams[i]= new Team(i!=teamHumanPlayer,this);
+            teams[i]= new TeamBasicIA(i!=teamHumanPlayer,this);
         }
         for (int i=0; i<height; i++) {//put the team as they must be
             for (int j=0; j<width; j++) {
@@ -45,6 +55,18 @@ public class Board extends BaseBoard{
                 teams[cell.getTeam()].getCells().add(cell);
             }
         }
+    }
+
+    public int getCellNumber(int team){
+        if(team>=0 && team<teams.length){
+            int cellNumber = teams[team].getCells().size();
+            if(team == 0){
+                cellNumber = width*height-cellNumber;
+            }
+            return cellNumber;
+        }
+        else
+            return 0;
     }
 
     /**
@@ -184,6 +206,10 @@ public class Board extends BaseBoard{
             return false;
     }
 
+    public boolean moveCell(Move move){
+        return moveCell(move.from, move.to);
+    }
+
     public void endHumanPlayerTurn(){
         if(isHumanPlayerPlaying()){
             endCurrentTurn();
@@ -224,4 +250,30 @@ public class Board extends BaseBoard{
         board.computeNextGeneration();
         board.printConsoleBoard(' ');
     }
+
+    public Board clone(){
+        Board board = null;
+        board = (Board)super.clone();
+        board.setTeams(teams.clone());
+        board.setCurrentPlayer(currentPlayer);
+        board.setTeamHumanPlayer(teamHumanPlayer);
+        return board;
+    }
+
+    public void setTeamHumanPlayer(int teamHumanPlayer) {
+        this.teamHumanPlayer = teamHumanPlayer;
+    }
+
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public int getTeamHumanPlayer() {
+        return teamHumanPlayer;
+    }
+
 }

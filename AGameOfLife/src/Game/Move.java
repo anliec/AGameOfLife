@@ -10,4 +10,8 @@ public class Move {
         this.to=to;
         this.score=score;
     }
+
+    public String toString(){
+        return from+" -> "+to+" score: "+score;
+    }
 }
