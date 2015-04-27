@@ -4,7 +4,8 @@ package Game;
 import java.io.*;
 
 /**
- * Created by nicolas on 02/04/15.
+ * A basic board which can perform basic moves
+ * @author team AGOL
  */
 public class BaseBoard implements Cloneable {
 

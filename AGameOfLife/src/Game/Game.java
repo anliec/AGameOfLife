@@ -1,7 +1,8 @@
 package Game;
 
 /**
- * Created by nicolas on 21/03/15.
+ * used to launch the main window
+ * @author team AGOL
  */
 public class Game {
     public static void main(String args[]) {
