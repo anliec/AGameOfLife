@@ -8,7 +8,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * Created by nicolas on 21/03/15.
+ * The Graphic Board contains the board plus some graphic and event elements
+ * @author team AGOL
  */
 public class GraphicBoard extends JPanel {
 
@@ -21,10 +22,10 @@ public class GraphicBoard extends JPanel {
     private BoardPoint selectedCell;
 
     /**
-     * Default constructor: load the Board:"AGameOfLife/Boards/TestBoard1"
+     * Default constructor: load the Board:"AGameOfLife/Boards/[theBoardName]"
      */
     public GraphicBoard(){
-        init(new Board("AGameOfLife/Boards/TestBoard3", ' '));
+        init(new Board("Boards/TestBoard3", ' '));
     }
 
     /**
@@ -36,7 +37,7 @@ public class GraphicBoard extends JPanel {
     }
 
     /**
-     * Do all the general initialisations tasks
+     * Do all the general initializations tasks
      * @param sourceBoard the board that will be set as the board of the GraphicBoard
      */
     private void init(Board sourceBoard){

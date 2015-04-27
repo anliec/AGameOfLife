@@ -44,7 +44,7 @@ public class Team {
     }
     
     /**
-     * the IA make the best move she can
+     * the IA make the best move it can
      * @author Edern Haumont
      */
     public void playIA() {

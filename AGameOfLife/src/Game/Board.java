@@ -7,14 +7,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-
+/**
+ * class which represent the game board, with specific rules.
+ * it commands the advancement of the turns
+ * @author team AGOL
+ */
 public class Board extends BaseBoard implements Cloneable{
 
     private int currentPlayer;
     private int teamHumanPlayer;
 	private Team[] teams;
 
-    @Override
+    /**
+     * @author team AGOL
+     * @Override
+     */
     public void setCellBoard(Cell[][] cellBoard) {
         this.cellBoard = cellBoard;
         height = cellBoard.length;
@@ -196,6 +203,12 @@ public class Board extends BaseBoard implements Cloneable{
         setCellBoard(newBoard);
     }
 
+    /**
+     * moves a cell from one point to another
+     * @param from
+     * @param to
+     * @return if the move have been performed (if the rules authorized it)
+     */
     public boolean moveCell(BoardPoint from, BoardPoint to){
         if(radiusBetween(from,to) == 1 && getCell(from).getTeam() == currentPlayer && !getCell(to).isAlive() ){
             setCell(to,getCell(from));
