@@ -39,7 +39,6 @@ public class TeamBasicIA extends Team {
     public void playIA(){
         LinkedList<Move> moves = new LinkedList<Move>();
         Board simulationBoard = board.clone();
-        simulationBoard.printConsoleBoard(' ');
         for (int c = 0; c < cells.size() ; c++) {
             Cell cell = cells.get(c);
             for (int x = -1; x < 1; x++) {
@@ -47,7 +46,7 @@ public class TeamBasicIA extends Team {
                     BoardPoint currantPoint = new BoardPoint(cell.getCoordinate().getX()+x,cell.getCoordinate().getY()+y);
                     if(simulationBoard.isOnBoard(currantPoint) && !simulationBoard.getCell(currantPoint).isAlive()) {
                         Move currantMove = new Move(cell.getCoordinate(),currantPoint,0);
-                        currantMove.score = getScoreMove(currantMove);
+                        currantMove.score = getScoreMove(currantMove, 3);
                         moves.add(currantMove);
                     }
                 }
@@ -64,7 +63,6 @@ public class TeamBasicIA extends Team {
                 System.out.println(finalMove);
             }
         }
-        simulationBoard.printConsoleBoard(' ');
     }
 
     public int getScoreMove(Move move){
@@ -79,4 +77,51 @@ public class TeamBasicIA extends Team {
             return -1; //illegal move
         }
     }
+
+    public int getScoreMove(Move move, int iteration){
+        return getScoreMove(move,iteration,board);
+    }
+
+    public int getScoreMove(Move move,int iteration, Board sourceBoard){
+        Board simulationBoard = sourceBoard.clone();
+        if(simulationBoard.moveCell(move)){
+            simulationBoard.computeNextGeneration();
+            if(iteration == 0){
+                int cellNumber;
+                cellNumber = simulationBoard.getTeam(getTeamNumber()).getCells().size();
+                return cellNumber;
+            }
+            else{
+                LinkedList<Move> moves = new LinkedList<Move>();
+                for (int c = 0; c < cells.size() ; c++) {
+                    Cell cell = cells.get(c);
+                    for (int x = -1; x < 1; x++) {
+                        for (int y = -1; y < 1; y++) {
+                            BoardPoint currantPoint = new BoardPoint(cell.getCoordinate().getX()+x,cell.getCoordinate().getY()+y);
+                            if(simulationBoard.isOnBoard(currantPoint) && !simulationBoard.getCell(currantPoint).isAlive()) {
+                                Move currantMove = new Move(cell.getCoordinate(),currantPoint,0);
+                                currantMove.score = getScoreMove(currantMove, iteration-1, simulationBoard);
+                                moves.add(currantMove);
+                            }
+                        }
+                    }
+                }
+                Move finalMove = moves.getFirst();
+                for(int i=1; i<moves.size(); i++) {
+                    if(moves.get(i).score>finalMove.score)
+                        finalMove = moves.get(i);
+                }
+                if(finalMove != null){
+                    if(finalMove.score>0) {
+                        return finalMove.score;
+                    }
+                }
+                return -1; // if no finalMove or a negative score
+            }
+        }
+        else{
+            return -1; //illegal move
+        }
+    }
+
 }
