@@ -86,7 +86,10 @@ public class TeamBasicIA extends Team {
         Board simulationBoard = sourceBoard.clone();
         if(simulationBoard.moveCell(move)){
             simulationBoard.computeNextGeneration();
-            if(iteration == 0){
+            if(simulationBoard.getTeam(getTeamNumber()).getCells().size() <= 0.8*sourceBoard.getTeam(getTeamNumber()).getCells().size()){
+                return 0;
+            }
+            else if(iteration == 0){
                 int cellNumber;
                 cellNumber = simulationBoard.getTeam(getTeamNumber()).getCells().size();
                 return cellNumber;
