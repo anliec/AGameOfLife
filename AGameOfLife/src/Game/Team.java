@@ -40,6 +40,7 @@ public class Team {
     public void play() {
         if (IA){
             playIA();
+            played = true;
         }
         else {
             
