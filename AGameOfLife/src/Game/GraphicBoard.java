@@ -59,7 +59,7 @@ public class GraphicBoard extends JPanel {
                     case MouseEvent.BUTTON3:
                         if(isACellSelected()){
                             BoardPoint pointOnBoard = mouseToBoard(mouseEvent.getPoint());
-                            if(board.moveCell(selectedCell,pointOnBoard)){
+                            if(board.playCurrentHumanTurn(new Move(selectedCell,pointOnBoard,0))){
                                 setSelectedCell(pointOnBoard);
                             }
                         }

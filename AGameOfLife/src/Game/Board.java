@@ -210,9 +210,9 @@ public class Board extends BaseBoard implements Cloneable{
      * @return if the move have been performed (if the rules authorized it)
      */
     public boolean moveCell(BoardPoint from, BoardPoint to){
-        if(radiusBetween(from,to) == 1 && getCell(from).getTeam() == currentPlayer && !getCell(to).isAlive() ){
+        if(radiusBetween(from,to) == 1 && getCell(from).getTeam() == currentPlayer && !getCell(to).isAlive() && !teams[currentPlayer].getPlayed()){
             setCell(to,getCell(from));
-            setCell(from,new Cell(0));
+            setCell(from, new Cell(0));
             return true;
         }
         else
@@ -221,6 +221,15 @@ public class Board extends BaseBoard implements Cloneable{
 
     public boolean moveCell(Move move){
         return moveCell(move.from, move.to);
+    }
+
+    public boolean playCurrentHumanTurn(Move move){
+        if(moveCell(move)){
+            teams[currentPlayer].setPlayed(true);
+            return true;
+        }
+        else
+            return false;
     }
 
     public void endHumanPlayerTurn(){
@@ -248,6 +257,9 @@ public class Board extends BaseBoard implements Cloneable{
 
     public void nextTurn(){
         computeNextGeneration();
+        for (int i = 1; i < teams.length; i++) {
+            teams[i].setPlayed(false);
+        }
         currentPlayer = 1;
         playCurrentTurn();
     }

@@ -4,28 +4,31 @@ import java.util.ArrayList;
 
 public class Team {
     protected ArrayList<Cell> cells;
+    protected Board board;
+    protected boolean IA;
+    protected boolean played;
 
     public void setBoard(Board board) {
         this.board = board;
     }
-
-    protected Board board;
-    protected boolean IA;
     
     public Team() {
         cells = new ArrayList<Cell>();
         IA=false;
+        played = false;
     }
     
     public Team(boolean IA) {
         cells = new ArrayList<Cell>();
         this.IA = IA;
+        played = false;
     }
 
     public Team(boolean IA, Board board){
         cells = new ArrayList<Cell>();
         this.IA = IA;
         this.board = board;
+        played = false;
     }
     
     public boolean isIA() {return IA;}
@@ -114,5 +117,13 @@ public class Team {
         else{
             return -1; //no cells no team...
         }
+    }
+
+    public void setPlayed(boolean played){
+        this.played = played;
+    }
+
+    public  boolean getPlayed(){
+        return played;
     }
 }
