@@ -196,13 +196,22 @@ public class GraphicBoard extends JPanel {
         Color ret;
         switch (cellTeam){
             case 1:
-                ret = new Color(200,0,0);
+                ret = new Color(255,0,0);
                 break;
             case 2:
-                ret = new Color(0,0,200);
+                ret = new Color(0,0,255);
                 break;
             case 3:
-                ret = new Color(200, 200, 0);
+                ret = new Color(255, 255, 0);
+                break;
+            case 4:
+                ret = new Color(0, 234, 255);
+                break;
+            case 5:
+                ret = new Color(255, 167, 0);
+                break;
+            case 6:
+                ret = new Color(0,150,0);
                 break;
             default:
                 ret = new Color(0,0,0);

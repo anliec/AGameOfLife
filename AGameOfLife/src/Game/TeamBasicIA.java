@@ -63,7 +63,7 @@ public class TeamBasicIA extends Team {
         if(finalMove != null){
             if(finalMove.score>0) {
                 board.moveCell(finalMove);
-                System.out.println(finalMove);
+                //System.out.println(finalMove);
             }
         }
     }

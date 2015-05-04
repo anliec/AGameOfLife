@@ -320,7 +320,8 @@ public class BaseBoard implements Cloneable {
             }
         }
         if(countTeam==0){
-            neighbourCount = ((xMax-xMin+1)*(yMax-yMin+1))-1-neighbourCount;//if neighbourCount is the number of zero then the number of neighbour is the number of cells minus neighbourCount
+            neighbourCount = ((xMax-xMin+1)*(yMax-yMin+1))-1-neighbourCount;
+            //if neighbourCount is the number of zero then the number of neighbour is the number of cells minus neighbourCount
         }
         return neighbourCount;
     }
