@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
 
 /**
  * class which represent the game board, with specific rules.
@@ -15,7 +16,7 @@ import java.io.InputStreamReader;
 public class Board extends BaseBoard implements Cloneable{
 
     private int currentPlayer;
-    private int teamHumanPlayer;
+    private LinkedList<Integer> teamHumanPlayer;
 	private Team[] teams;
 
     /**
@@ -27,8 +28,8 @@ public class Board extends BaseBoard implements Cloneable{
         height = cellBoard.length;
         width = cellBoard[0].length;
         //clean up the teams:
-        reloadTeams();
         resetCellCoordinate();
+        reloadTeams();
     }
 
     public Team[] getTeams() {
@@ -52,9 +53,9 @@ public class Board extends BaseBoard implements Cloneable{
      * do all the stuff to get clean teams
      */
     public void reloadTeams(){
-        teams = new Team[4]; //number of teams : 2 + 1 (dead cell team)
+        teams = new Team[numberOfTeams+1]; //number of teams : 2 + 1 (dead cell team)
         for (int i = 0; i < teams.length; i++) {
-            teams[i]= new TeamBasicIA(i!=teamHumanPlayer,this);
+            teams[i]= new TeamBasicIA(!teamHumanPlayer.contains(i),this);
         }
         for (int i=0; i<height; i++) {//put the team as they must be
             for (int j=0; j<width; j++) {
@@ -139,8 +140,10 @@ public class Board extends BaseBoard implements Cloneable{
      * @param cells cells array witch will be set as cellBoard
      */
     protected void init(Cell[][] cells){
+        teamHumanPlayer = new LinkedList<Integer>();
         currentPlayer = 1;
-        teamHumanPlayer = 1;
+        teamHumanPlayer.add(1);
+        teamHumanPlayer.add(2);
         super.init(cells);
         //generationNumber = 0;
         //setCellBoard(cells);
@@ -265,7 +268,7 @@ public class Board extends BaseBoard implements Cloneable{
     }
 
     public boolean isHumanPlayerPlaying(){
-        return currentPlayer==teamHumanPlayer;
+        return teamHumanPlayer.contains(currentPlayer);
     }
 
     public static void main(String args[]) {
@@ -285,11 +288,11 @@ public class Board extends BaseBoard implements Cloneable{
         }
         board.setTeams(teams.clone());
         board.setCurrentPlayer(currentPlayer);
-        board.setTeamHumanPlayer(teamHumanPlayer);
+        board.setTeamHumanPlayer(teamHumanPlayer);//cloning is useless
         return board;
     }
 
-    public void setTeamHumanPlayer(int teamHumanPlayer) {
+    public void setTeamHumanPlayer(LinkedList<Integer> teamHumanPlayer) {
         this.teamHumanPlayer = teamHumanPlayer;
     }
 
@@ -301,7 +304,7 @@ public class Board extends BaseBoard implements Cloneable{
         return currentPlayer;
     }
 
-    public int getTeamHumanPlayer() {
+    public LinkedList<Integer> getTeamHumanPlayer() {
         return teamHumanPlayer;
     }
 
