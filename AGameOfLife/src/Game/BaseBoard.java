@@ -13,6 +13,7 @@ public class BaseBoard implements Cloneable {
     protected int width;
     protected int height;
     protected Cell[][] cellBoard;
+    protected int numberOfTeams;
 
     public int getWidth() {
         return width;
@@ -149,6 +150,8 @@ public class BaseBoard implements Cloneable {
                         int n;
                         try {
                             n = Integer.parseInt(line.substring(a, a + 1) );
+                            if (n > numberOfTeams) 
+                                numberOfTeams = n;
                         }
                         catch (NumberFormatException e){
                             n = 0; //if the value is not numeric, as an error we set it to zero
@@ -260,6 +263,7 @@ public class BaseBoard implements Cloneable {
                 }
             }
         }
+        numberOfTeams = 2;
         return cells;
     }
 
