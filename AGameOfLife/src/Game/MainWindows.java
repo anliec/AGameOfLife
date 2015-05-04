@@ -82,6 +82,11 @@ public class MainWindows extends JFrame {
                 AboutWindow about = new AboutWindow();
             }
         });
+        optionsMenuItem.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent event){
+                OptionWindow options = new OptionWindow();
+            }
+        });
         fileMenu.add(nouveauMenuItem);
         fileMenu.add(saveMenuItem);
         fileMenu.add(closeMenuItem);
