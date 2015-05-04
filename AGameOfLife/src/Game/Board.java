@@ -52,7 +52,7 @@ public class Board extends BaseBoard implements Cloneable{
      * do all the stuff to get clean teams
      */
     public void reloadTeams(){
-        teams = new Team[3]; //number of teams : 2 + 1 (dead cell team)
+        teams = new Team[4]; //number of teams : 2 + 1 (dead cell team)
         for (int i = 0; i < teams.length; i++) {
             teams[i]= new TeamBasicIA(i!=teamHumanPlayer,this);
         }

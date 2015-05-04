@@ -201,6 +201,9 @@ public class GraphicBoard extends JPanel {
             case 2:
                 ret = new Color(0,0,200);
                 break;
+            case 3:
+                ret = new Color(200, 200, 0);
+                break;
             default:
                 ret = new Color(0,0,0);
         }

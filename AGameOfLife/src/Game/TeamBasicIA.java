@@ -37,6 +37,9 @@ public class TeamBasicIA extends Team {
 
     @Override
     public void playIA(){
+        if(cells.size()==0){
+            return;
+        }
         LinkedList<Move> moves = new LinkedList<Move>();
         Board simulationBoard = board.clone();
         for (int c = 0; c < cells.size() ; c++) {
@@ -62,19 +65,6 @@ public class TeamBasicIA extends Team {
                 board.moveCell(finalMove);
                 System.out.println(finalMove);
             }
-        }
-    }
-
-    public int getScoreMove(Move move){
-        Board simulationBoard = board.clone();
-        if(simulationBoard.moveCell(move)){
-            simulationBoard.computeNextGeneration();
-            int cellNumber;
-            cellNumber = simulationBoard.getTeam(getTeamNumber()).getCells().size();
-            return cellNumber;
-        }
-        else{
-            return -1; //illegal move
         }
     }
 

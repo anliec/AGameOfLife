@@ -145,7 +145,7 @@ public class Team implements Cloneable {
         catch (CloneNotSupportedException e) {
             e.printStackTrace(System.err);
         }
-        team.setBoard(board);
+        team.setBoard(board); //if board.clone() -> infinity loop
         ArrayList<Cell> copiedCell = new ArrayList<Cell>();
         for (int i = 0; i < cells.size(); i++) {
             copiedCell.add(cells.get(i).clone());
