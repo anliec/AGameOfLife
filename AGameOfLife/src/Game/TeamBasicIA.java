@@ -46,7 +46,7 @@ public class TeamBasicIA extends Team {
                     BoardPoint currantPoint = new BoardPoint(cell.getCoordinate().getX()+x,cell.getCoordinate().getY()+y);
                     if(simulationBoard.isOnBoard(currantPoint) && !simulationBoard.getCell(currantPoint).isAlive()) {
                         Move currantMove = new Move(cell.getCoordinate(),currantPoint,0);
-                        currantMove.score = getScoreMove(currantMove, 3);
+                        currantMove.score = getScoreMove(currantMove, 1);
                         moves.add(currantMove);
                     }
                 }

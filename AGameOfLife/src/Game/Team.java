@@ -2,7 +2,8 @@ package Game;
 
 import java.util.ArrayList;
 
-public class Team {
+public class Team implements Cloneable {
+
     protected ArrayList<Cell> cells;
     protected Board board;
     protected boolean IA;
@@ -33,8 +34,16 @@ public class Team {
     
     public boolean isIA() {return IA;}
 
+    public void setIA(boolean IA){
+        this.IA = IA;
+    }
+
     public ArrayList<Cell> getCells() {
         return cells;
+    }
+
+    public void setCells(ArrayList<Cell> cells){
+        this.cells = cells;
     }
     
     public void play() {
@@ -126,5 +135,24 @@ public class Team {
 
     public  boolean getPlayed(){
         return played;
+    }
+
+    public Team clone(){
+        Team team = null;
+        try{
+            team = (Team)super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            e.printStackTrace(System.err);
+        }
+        team.setBoard(board);
+        ArrayList<Cell> copiedCell = new ArrayList<Cell>();
+        for (int i = 0; i < cells.size(); i++) {
+            copiedCell.add(cells.get(i).clone());
+        }
+        team.setCells(copiedCell);
+        team.setIA(IA);
+        team.setPlayed(played);
+        return team;
     }
 }

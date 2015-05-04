@@ -35,6 +35,16 @@ public class BaseBoard implements Cloneable {
         width = cellBoard[0].length;
     }
 
+    /**
+     * set a new cell board without changing anything else,
+     * all the others settings MUST be set by an other way
+     * (created for optimisation purpose)
+     * @param cellBoard the new cell board
+     */
+    public void basicallySetCellBoard(Cell[][] cellBoard){
+        this.cellBoard = cellBoard;
+    }
+
     public void setHeight(int height) {
         this.height = height;
     }
@@ -366,7 +376,8 @@ public class BaseBoard implements Cloneable {
                 cellBoardCopy[x][y] = cellBoard[x][y];
             }
         }
-        baseBoard.setCellBoard(cellBoardCopy);
+        //baseBoard.setCellBoard(cellBoardCopy);
+        baseBoard.basicallySetCellBoard(cellBoardCopy);
         baseBoard.setHeight(height);
         baseBoard.setWidth(width);
         return baseBoard;

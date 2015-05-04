@@ -279,6 +279,10 @@ public class Board extends BaseBoard implements Cloneable{
     public Board clone(){
         Board board = null;
         board = (Board)super.clone();
+        Team[] copiedTeam = new Team[teams.length];
+        for (int i = 0; i < copiedTeam.length; i++) {
+            copiedTeam[i] = teams[i].clone();
+        }
         board.setTeams(teams.clone());
         board.setCurrentPlayer(currentPlayer);
         board.setTeamHumanPlayer(teamHumanPlayer);

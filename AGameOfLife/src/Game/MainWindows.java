@@ -38,6 +38,7 @@ public class MainWindows extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if("EndOfHumanTurn".equals(actionEvent.getActionCommand())){
+                    BoardWidget.unselectCell();
                     BoardWidget.getBoard().endHumanPlayerTurn();
                     BoardWidget.repaint();
                 }

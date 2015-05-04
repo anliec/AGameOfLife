@@ -2,7 +2,6 @@ package Game;
 
 public class Cell implements Cloneable{
 
-
     BoardPoint coordinate;
     int team;//0 : sans �quipe, 1 : �quipe 1, 2 : �quipe 2, etc...
 
