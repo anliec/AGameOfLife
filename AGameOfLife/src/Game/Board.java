@@ -143,10 +143,10 @@ public class Board extends BaseBoard implements Cloneable{
         teamHumanPlayer = new LinkedList<Integer>();
         currentPlayer = 1;
         teamHumanPlayer.add(1);
-        teamHumanPlayer.add(2);
         super.init(cells);
         //generationNumber = 0;
         //setCellBoard(cells);
+        writeBoardToFile("test.agols",' ');
     }
 
     /**

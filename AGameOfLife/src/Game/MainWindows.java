@@ -6,10 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.swing.*;
 
 /**
  * class of the main window which contains the whole game
@@ -21,6 +18,8 @@ public class MainWindows extends JFrame {
     protected Button BtNextGeneration;
     protected JMenuBar menuBar;
     protected String title;
+
+    protected JFileChooser fc;
 
     /**
      * default constructor
@@ -41,7 +40,8 @@ public class MainWindows extends JFrame {
         menuBar = new JMenuBar();
         initMenuBar();
         setJMenuBar(menuBar);
-        
+        //load file selection window
+        fc = new JFileChooser("Boards");
 
         ///actionListener
         BtNextGeneration.setActionCommand("EndOfHumanTurn");
@@ -67,27 +67,39 @@ public class MainWindows extends JFrame {
         JMenu fileMenu = new JMenu("Fichier"),
                 toolsMenu = new JMenu("Outils"),
                 helpMenu = new JMenu("A Propos");
-        JMenuItem nouveauMenuItem = new JMenuItem("Nouvelle Simulation"),
+        JMenuItem newMenuItem = new JMenuItem("Nouvelle Simulation"),
                saveMenuItem = new JMenuItem("Sauvegarder"),
                closeMenuItem = new JMenuItem("Fermer"),
                optionsMenuItem = new JMenuItem("Options"),
                aboutMenuItem = new JMenuItem("?");
-        closeMenuItem.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent event){
+        closeMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
                 System.exit(0);
             }
         });
-        aboutMenuItem.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent event){
+        newMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                openFileMenu();
+            }
+        });
+        saveMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                saveFileMenu();
+            }
+        });
+        aboutMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
                 AboutWindow about = new AboutWindow();
             }
         });
-        optionsMenuItem.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent event){
+        optionsMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
                 OptionWindow options = new OptionWindow();
             }
         });
-        fileMenu.add(nouveauMenuItem);
+        fileMenu.add(newMenuItem);
         fileMenu.add(saveMenuItem);
         fileMenu.add(closeMenuItem);
         toolsMenu.add(optionsMenuItem);
@@ -95,5 +107,19 @@ public class MainWindows extends JFrame {
         menuBar.add(fileMenu);
         menuBar.add(toolsMenu);
         menuBar.add(helpMenu);
+    }
+
+    public void openFileMenu(){
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+            BoardWidget.setBoardFromFile(fc.getSelectedFile().getPath(),' ');
+        }
+    }
+
+    public void saveFileMenu(){
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        if(fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+            BoardWidget.saveBoardToFile(fc.getSelectedFile().getPath(),' ');
+        }
     }
 }

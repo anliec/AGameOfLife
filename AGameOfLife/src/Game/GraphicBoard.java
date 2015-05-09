@@ -245,5 +245,14 @@ public class GraphicBoard extends JPanel {
         return new Point(getAbscissaOrigin(),getOrdinateOrigin());
     }
 
+    public void setBoardFromFile(String path, char sep){
+        init(new Board(path,sep));
+        repaint();
+    }
+
+    public void saveBoardToFile(String path, char sep){
+        board.writeBoardToFile(path, sep);
+    }
+
 
 }

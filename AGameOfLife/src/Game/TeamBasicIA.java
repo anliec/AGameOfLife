@@ -49,21 +49,22 @@ public class TeamBasicIA extends Team {
                     BoardPoint currantPoint = new BoardPoint(cell.getCoordinate().getX()+x,cell.getCoordinate().getY()+y);
                     if(simulationBoard.isOnBoard(currantPoint) && !simulationBoard.getCell(currantPoint).isAlive()) {
                         Move currantMove = new Move(cell.getCoordinate(),currantPoint,0);
-                        currantMove.score = getScoreMove(currantMove, 1);
+                        currantMove.score = getScoreMove(currantMove, 5);
                         moves.add(currantMove);
                     }
                 }
             }
         }
-        Move finalMove = moves.getFirst();
-        for(int i=1; i<moves.size(); i++) {
-            if(moves.get(i).score>finalMove.score)
-                finalMove = moves.get(i);
-        }
-        if(finalMove != null){
-            if(finalMove.score>0) {
-                board.moveCell(finalMove);
-                //System.out.println(finalMove);
+        if(moves.size()>0){
+            Move finalMove = moves.getFirst();
+            for(int i=1; i<moves.size(); i++) {
+                if(moves.get(i).score>finalMove.score)
+                    finalMove = moves.get(i);
+            }
+            if(finalMove != null){
+                if(finalMove.score>0) {
+                    board.moveCell(finalMove);
+                }
             }
         }
     }
@@ -76,7 +77,7 @@ public class TeamBasicIA extends Team {
         Board simulationBoard = sourceBoard.clone();
         if(simulationBoard.moveCell(move)){
             simulationBoard.computeNextGeneration();
-            if(simulationBoard.getTeam(getTeamNumber()).getCells().size() <= 0.8*sourceBoard.getTeam(getTeamNumber()).getCells().size()){
+            if(simulationBoard.getTeam(getTeamNumber()).getCells().size() <= 0.9*sourceBoard.getTeam(getTeamNumber()).getCells().size()){
                 return 0;
             }
             else if(iteration == 0){
@@ -99,14 +100,16 @@ public class TeamBasicIA extends Team {
                         }
                     }
                 }
-                Move finalMove = moves.getFirst();
-                for(int i=1; i<moves.size(); i++) {
-                    if(moves.get(i).score>finalMove.score)
-                        finalMove = moves.get(i);
-                }
-                if(finalMove != null){
-                    if(finalMove.score>0) {
-                        return finalMove.score;
+                if(moves.size()>0){
+                    Move finalMove = moves.getFirst();
+                    for(int i=1; i<moves.size(); i++) {
+                        if(moves.get(i).score>finalMove.score)
+                            finalMove = moves.get(i);
+                    }
+                    if(finalMove != null){
+                        if(finalMove.score>0) {
+                            return finalMove.score;
+                        }
                     }
                 }
                 return -1; // if no finalMove or a negative score

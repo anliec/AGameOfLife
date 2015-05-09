@@ -90,7 +90,7 @@ public class BaseBoard implements Cloneable {
     }
 
     public void setCell(BoardPoint cellCoordinates, Cell cell){
-        setCell(cellCoordinates.getX(),cellCoordinates.getY(),cell);
+        setCell(cellCoordinates.getX(), cellCoordinates.getY(), cell);
     }
 
     /**
@@ -99,7 +99,7 @@ public class BaseBoard implements Cloneable {
      * @param h height
      */
     public BaseBoard(int w, int h){
-        init(randomBoard(w,h,0.3));
+        init(randomBoard(w, h, 0.3));
     }
 
     public BaseBoard(Cell[][] cells){
@@ -114,7 +114,7 @@ public class BaseBoard implements Cloneable {
      * @param h height
      */
     public BaseBoard(String path, char sep, int w, int h) {
-        loadBoardFromFile(path,sep,w,h);
+        loadBoardFromFile(path, sep, w, h);
     }
 
     /**
@@ -122,7 +122,7 @@ public class BaseBoard implements Cloneable {
      * @param sep separator between numbers
      */
     public BaseBoard(String path, char sep){
-        loadBoardFromFile(path,sep,getBoardWidthFromFile(path,sep),getBoardHeightFromFile(path));
+        loadBoardFromFile(path, sep, getBoardWidthFromFile(path, sep), getBoardHeightFromFile(path));
     }
 
     /**
@@ -171,6 +171,23 @@ public class BaseBoard implements Cloneable {
             cells = randomBoard(10,10,0.5); //if there are an error when reading the file we get a random board...
         }
         init(cells);
+    }
+
+    public void writeBoardToFile(String path, char sep){
+        try {
+            PrintWriter writer = new PrintWriter(path, "UTF-8");
+            for (int x = 0; x < cellBoard.length; x++) {
+                for (int y = 0; y < cellBoard[0].length; y++) {
+                    writer.print(cellBoard[x][y]);
+                    writer.print(sep);
+                }
+                writer.println();
+            }
+            writer.close();
+        }
+        catch (IOException e){
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 
     /**
