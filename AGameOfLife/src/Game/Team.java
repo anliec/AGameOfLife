@@ -130,11 +130,11 @@ public class Team implements Cloneable {
             Cell cell = cells.get(c);
             for (int x = -1; x < 1; x++) {
                 for (int y = -1; y < 1; y++) {
-                    BoardPoint currantPoint = new BoardPoint(cell.getCoordinate().getX()+x,cell.getCoordinate().getY()+y);
-                    if(simulationBoard.isOnBoard(currantPoint) && !simulationBoard.getCell(currantPoint).isAlive()) {
-                        Move currantMove = new Move(cell.getCoordinate(),currantPoint,0);
-                        currantMove.score = getScoreMove(currantMove, 5);
-                        moves.add(currantMove);
+                    BoardPoint currentPoint = new BoardPoint(cell.getCoordinate().getX()+x,cell.getCoordinate().getY()+y);
+                    if(simulationBoard.isOnBoard(currentPoint) && !simulationBoard.getCell(currentPoint).isAlive()) {
+                        Move currentMove = new Move(cell.getCoordinate(),currentPoint,0);
+                        currentMove.score = getScoreMove(currentMove, 5);
+                        moves.add(currentMove);
                     }
                 }
             }
@@ -170,7 +170,7 @@ public class Team implements Cloneable {
                 for (int i=1; i<simulationBoard.getTeams().length; i++) {
                     if(teamNumber !=i) {
                         ennemyNumber += simulationBoard.getTeam(i).getCells().size();
-                        System.out.println(ennemyNumber);
+                        //System.out.println(ennemyNumber);
                     }
                 }
                 return friendNumber/(ennemyNumber+1);//classic score

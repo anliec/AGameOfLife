@@ -3,10 +3,11 @@ package Game;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 public class OptionWindow extends JFrame{
-        JPanel ComboPanel;
-        JPanel player1;
+    JPanel ComboPanel;
+    JPanel player1;
     JPanel player2;
     JPanel player3;
     JPanel player4;
@@ -26,7 +27,7 @@ public class OptionWindow extends JFrame{
     JTextField cell;//number of cells
     JButton Exit;
     
-    private JCheckBox[] PlayerOption = new JCheckBox[9];
+    private JCheckBox[] PlayerOption = new JCheckBox[8];
     
     FlowLayout C;//ComboBox
     FlowLayout P1;
@@ -36,17 +37,7 @@ public class OptionWindow extends JFrame{
     
     GridLayout gridLayoutPrincipal;
     
-    /*
-     * JButton jButton_AC; JButton jButton_C; JButton jButton_Egal; JButton
-     * jButton_Div; JButton jButton_Mult; JButton jButton_signe; JButton
-     * jButton_add; JButton jButton_moins; JButton boutonp; FlowLayout
-     * flowLayoutResultat; GridLayout gridLayoutPrincipal; GridLayout
-     * GridLayoutAc_C_Egal; GridLayout GridLayout7_8_9; GridLayout
-     * GridLayout4_5_6; GridLayout GridLayout1_2_3; GridLayout
-     * GridLayout0_signe; JPanel jPanelAC_C_Egal; JPanel jPanel1_2_3; JPanel
-     * jPanel4_5_6; JPanel jPanel7_8_9; JPanel jPanel0_signe; JPanel
-     * jPanel_Resultat;
-     */
+    LinkedList<Boolean> Players;
 
     public OptionWindow() {
         setSize(new Dimension(1200, 900));
@@ -90,11 +81,11 @@ public class OptionWindow extends JFrame{
         P2 = new FlowLayout(4);
         player2.setLayout(P2);
         Label2 = new JLabel("Player 2 : ");
-        PlayerOption[3] = new JCheckBox("RL player");
-        PlayerOption[4] = new JCheckBox("IA player");
+        PlayerOption[2] = new JCheckBox("RL player");
+        PlayerOption[3] = new JCheckBox("IA player");
         player2.add(Label2);
+        player2.add(PlayerOption[2]);
         player2.add(PlayerOption[3]);
-        player2.add(PlayerOption[4]);
         add(player2);
         player2.setVisible(false);
 
@@ -102,11 +93,11 @@ public class OptionWindow extends JFrame{
         P3 = new FlowLayout(4);
         player3.setLayout(P3);
         Label3 = new JLabel("Player 3 : ");
-        PlayerOption[5] = new JCheckBox("RL player");
-        PlayerOption[6] = new JCheckBox("IA player");
+        PlayerOption[4] = new JCheckBox("RL player");
+        PlayerOption[5] = new JCheckBox("IA player");
         player3.add(Label3);
+        player3.add(PlayerOption[4]);
         player3.add(PlayerOption[5]);
-        player3.add(PlayerOption[6]);
         add(player3);
         player3.setVisible(false);
 
@@ -114,18 +105,25 @@ public class OptionWindow extends JFrame{
         P4 = new FlowLayout(4);
         player4.setLayout(P4);
         Label4 = new JLabel("Player 4 : ");
-        PlayerOption[7] = new JCheckBox("RL player");
-        PlayerOption[8] = new JCheckBox("IA player");
+        PlayerOption[6] = new JCheckBox("RL player");
+        PlayerOption[7] = new JCheckBox("IA player");
         player4.add(Label4);
+        player4.add(PlayerOption[6]);
         player4.add(PlayerOption[7]);
-        player4.add(PlayerOption[8]);
         add(player4);
         player4.setVisible(false);
+        
+        for(int i=0; i<PlayerOption.length; i++){
+            PlayerOption[i].addActionListener(new ItemAction3());
+        }
+
 
         OK = new JButton("OK");
         add(OK);
         OK.addItemListener(new ItemState());
         OK.addActionListener(new ItemAction2());
+        
+        Players = new LinkedList<Boolean>();
 
         pack();
         setVisible(true);
@@ -162,9 +160,47 @@ public class OptionWindow extends JFrame{
         
         public class ItemAction2 implements ActionListener {
                 public void actionPerformed(ActionEvent e){
-                        
-                System.exit(0);
-                        
+                        if (PlayerOption[0].isSelected() == true){
+                        Players.add(true);
+                        PlayerOption[1].setSelected(false);
+                        System.out.println("true1");
+                            }
+                            if (PlayerOption[1].isSelected() == true){
+                        Players.add(false);
+                        PlayerOption[0].setSelected(false);
+                        System.out.println("false1");
+                            }
+                            if (PlayerOption[2].isSelected() == true){
+                        Players.add(true);
+                        PlayerOption[3].setSelected(false);
+                        System.out.println("true2");
+                            }
+                            if (PlayerOption[3].isSelected() == true){
+                        Players.add(false);
+                        PlayerOption[2].setSelected(false);
+                        System.out.println("false2");
+                            }
+                            if (PlayerOption[4].isSelected() == true){
+                        Players.add(true);
+                        PlayerOption[5].setSelected(false);
+                        System.out.println("true3");
+                            }
+                            if (PlayerOption[5].isSelected() == true){
+                        Players.add(false);
+                        PlayerOption[4].setSelected(false);
+                        System.out.println("false3");
+                            }
+                            if (PlayerOption[6].isSelected() == true){
+                        Players.add(true);
+                        PlayerOption[7].setSelected(false);
+                        System.out.println("true4");
+                            }
+                            if (PlayerOption[7].isSelected() == true){
+                        Players.add(false);
+                        PlayerOption[6].setSelected(false);
+                        System.out.println("false4");
+                            }
+                        System.exit(0);                        
                 }
         }//ItemAction2
         
@@ -173,7 +209,39 @@ public class OptionWindow extends JFrame{
                         System.out.println(e.getItem());
                 }
         }//ItemListener
-                
+        
+        public class ItemAction3 implements ActionListener {
+                public void actionPerformed(ActionEvent e){
+                        
+                        //true = real player ; false = IA player
+                        if (PlayerOption[0].isSelected() == true){
+                    PlayerOption[1].setSelected(false);
+                    
+                        }
+                        if (PlayerOption[1].isSelected() == true){
+                    PlayerOption[0].setSelected(false);
+                        }
+                        if (PlayerOption[2].isSelected() == true){
+                    PlayerOption[3].setSelected(false);
+                        }
+                        if (PlayerOption[3].isSelected() == true){
+                    PlayerOption[2].setSelected(false);
+                        }
+                        if (PlayerOption[4].isSelected() == true){
+                    PlayerOption[5].setSelected(false);
+                        }
+                        if (PlayerOption[5].isSelected() == true){
+                    PlayerOption[4].setSelected(false);
+                        }
+                        if (PlayerOption[6].isSelected() == true){
+                    PlayerOption[7].setSelected(false);
+                        }
+                        if (PlayerOption[7].isSelected() == true){
+                    PlayerOption[6].setSelected(false);
+                        }
+            
+                }
+        }
         
         //test
          public static void main (String args[]) {
