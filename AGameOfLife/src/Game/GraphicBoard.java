@@ -17,15 +17,27 @@ public class GraphicBoard extends JPanel {
         return board;
     }
 
-    private Board board;
-    private int squareSize;
-    private BoardPoint selectedCell;
+    protected Board board;
+    protected int squareSize;
+    protected BoardPoint selectedCell;
+    protected Options gameOptions;
 
     /**
      * Default constructor: load the Board:"AGameOfLife/Boards/[theBoardName]"
      */
-    public GraphicBoard(){
-        init(new Board("Boards/TestBoard3", ' '));
+    public GraphicBoard(Options gameOptions){
+        voidBoardInit(10,10);
+        this.gameOptions = gameOptions;
+    }
+
+    public GraphicBoard(int width, int height, Options gameOptions){
+        voidBoardInit(width, height);
+        this.gameOptions = gameOptions;
+    }
+
+    public GraphicBoard(String path, Options gameOptions){
+        init(new Board(path, ' ',gameOptions));
+        this.gameOptions = gameOptions;
     }
 
     /**
@@ -33,6 +45,7 @@ public class GraphicBoard extends JPanel {
      * @param sourceBoard the board that will be set as the board of the GraphicBoard
      */
     public GraphicBoard(Board sourceBoard){
+        gameOptions = sourceBoard.getBoardOptions();
         init(sourceBoard);
     }
 
@@ -54,15 +67,10 @@ public class GraphicBoard extends JPanel {
             public void mouseClicked(MouseEvent mouseEvent) {
                 switch (mouseEvent.getButton()){
                     case MouseEvent.BUTTON1:
-                        setSelectedCell(mouseToBoard(mouseEvent.getPoint()));
+                        onLeftClick(mouseToBoard(mouseEvent.getPoint()));
                         break;
                     case MouseEvent.BUTTON3:
-                        if(isACellSelected()){
-                            BoardPoint pointOnBoard = mouseToBoard(mouseEvent.getPoint());
-                            if(board.playCurrentHumanTurn(new Move(selectedCell,pointOnBoard,0))){
-                                setSelectedCell(pointOnBoard);
-                            }
-                        }
+                        onRightClick(mouseToBoard(mouseEvent.getPoint()));
                         break;
                 }
                 repaint();
@@ -90,6 +98,28 @@ public class GraphicBoard extends JPanel {
         });
         selectedCell = new BoardPoint(-1,-1);
         setSquareSize();// to be sure that squareSize is not zero
+    }
+
+    protected void onLeftClick(BoardPoint point){
+        setSelectedCell(point);
+    }
+
+    protected void onRightClick(BoardPoint point){
+        if(isACellSelected()){
+            if(board.playCurrentHumanTurn(new Move(selectedCell,point,0))){
+                setSelectedCell(point);
+            }
+        }
+    }
+
+    private void voidBoardInit(int width, int height){
+        Cell[][] cellTab = new Cell[width][height];
+        for (int x = 0; x < cellTab.length; x++) {
+            for (int y = 0; y < cellTab[0].length; y++) {
+                cellTab[x][y] = new Cell(0,new BoardPoint(x,y));
+            }
+        }
+        init(new Board(cellTab,gameOptions));
     }
 
     /**
@@ -241,12 +271,12 @@ public class GraphicBoard extends JPanel {
      * Compute the coordinate of the origin
      * @return the origin point
      */
-    private Point getOrigin(){
+    protected Point getOrigin(){
         return new Point(getAbscissaOrigin(),getOrdinateOrigin());
     }
 
     public void setBoardFromFile(String path, char sep){
-        init(new Board(path,sep));
+        init(new Board(path,sep,gameOptions));
         repaint();
     }
 

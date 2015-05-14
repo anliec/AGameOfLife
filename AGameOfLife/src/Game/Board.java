@@ -16,17 +16,63 @@ import java.util.LinkedList;
 public class Board extends BaseBoard implements Cloneable{
 
     private int currentPlayer;
-    private LinkedList<Integer> teamHumanPlayer;
 	private Team[] teams;
+
+    /**
+     * random generator
+     * @param w width
+     * @param h height
+     */
+    public Board(int w, int h, Options boardOptions){
+        super(w, h, boardOptions);
+    }
+
+    public Board( Options boardOptions){
+        super(boardOptions);
+    }
+
+    public Board(Cell[][] cells, Options boardOptions){
+        super(cells, boardOptions);
+    }
+
+    /**
+     *
+     * @param path file path
+     * @param sep separator between numbers
+     * @param w width
+     * @param h height
+     */
+    public Board(String path, char sep, int w, int h, Options boardOptions) {
+        super(path, sep, w, h, boardOptions);
+    }
+
+    /**
+     * @param path file path
+     * @param sep separator between numbers
+     */
+    public Board(String path, char sep, Options boardOptions){
+        super(path, sep, boardOptions);
+    }
+
+    /**
+     * Do all the general initialisations tasks
+     * @param cells cells array witch will be set as cellBoard
+     */
+    protected void init(Cell[][] cells){
+        currentPlayer = 1;
+        super.init(cells);
+        //generationNumber = 0;
+        //setCellBoard(cells);
+        writeBoardToFile("test.agols", ' ');
+    }
+
 
     /**
      * @author team AGOL
      * @Override
      */
     public void setCellBoard(Cell[][] cellBoard) {
-        this.cellBoard = cellBoard;
-        height = cellBoard.length;
-        width = cellBoard[0].length;
+        super.setCellBoard(cellBoard);
         //clean up the teams:
         resetCellCoordinate();
         reloadTeams();
@@ -53,9 +99,10 @@ public class Board extends BaseBoard implements Cloneable{
      * do all the stuff to get clean teams
      */
     public void reloadTeams(){
+        numberOfTeams = boardOptions.getTeamsIA().size()-1;
         teams = new Team[numberOfTeams+1]; //number of teams : 2 + 1 (dead cell team)
         for (int i = 0; i < teams.length; i++) {
-            teams[i]= new TeamBasicIA(!teamHumanPlayer.contains(i),this);
+            teams[i]= new TeamBasicIA(boardOptions.getTeamsIA().get(i),this);
         }
         for (int i=0; i<height; i++) {//put the team as they must be
             for (int j=0; j<width; j++) {
@@ -84,7 +131,7 @@ public class Board extends BaseBoard implements Cloneable{
      */
     @Override
     public void setCell(BoardPoint cellCoordinates, Cell cell){
-        setCell(cellCoordinates.getX(),cellCoordinates.getY(),cell);
+        setCell(cellCoordinates.getX(), cellCoordinates.getY(), cell);
     }
 
     /**
@@ -96,58 +143,15 @@ public class Board extends BaseBoard implements Cloneable{
     @Override
     public void setCell(int x, int y, Cell cell){
         if(x>=0 && x<width && y>=0 && y<height){
-            teams[cellBoard[y][x].getTeam()].getCells().remove(cellBoard[y][x]);//remove the cell from it currant team
+            Team team = teams[cellBoard[y][x].getTeam()];
+            Cell cell1 = cellBoard[y][x];
+            team.getCells().remove(cell1);//remove the cell from it currant team
             cellBoard[y][x] = cell;//set the new cell
             teams[cellBoard[y][x].getTeam()].getCells().add(cellBoard[y][x]);//add the new cell in is new team
             cellBoard[y][x].setCoordinate(new BoardPoint(x,y));
         }
     }
 
-    /**
-	 * random generator
-	 * @param w width
-	 * @param h height
-	 */
-    public Board(int w, int h){
-        super(w, h);
-    }
-
-    public Board(Cell[][] cells){
-        super(cells);
-    }
-    
-    /**
-     * 
-     * @param path file path
-     * @param sep separator between numbers
-     * @param w width
-     * @param h height
-     */
-    public Board(String path, char sep, int w, int h) {
-        super(path,sep,w,h);
-    }
-
-    /**
-     * @param path file path
-     * @param sep separator between numbers
-     */
-    public Board(String path, char sep){
-        super(path, sep);
-    }
-
-    /**
-     * Do all the general initialisations tasks
-     * @param cells cells array witch will be set as cellBoard
-     */
-    protected void init(Cell[][] cells){
-        teamHumanPlayer = new LinkedList<Integer>();
-        currentPlayer = 1;
-        teamHumanPlayer.add(1);
-        super.init(cells);
-        //generationNumber = 0;
-        //setCellBoard(cells);
-        writeBoardToFile("test.agols",' ');
-    }
 
     /**
      * Compute the next generation of the board
@@ -246,9 +250,10 @@ public class Board extends BaseBoard implements Cloneable{
         if(currentPlayer<teams.length){
             playCurrentTurn();
         }
-        else{
+        else if(boardOptions.getTeamsIA().contains(false)){
             nextTurn();
         }
+        //if there are no human player the game does't go to the next turn to prevent infinity loop
     }
 
     public void playCurrentTurn(){
@@ -268,11 +273,17 @@ public class Board extends BaseBoard implements Cloneable{
     }
 
     public boolean isHumanPlayerPlaying(){
-        return teamHumanPlayer.contains(currentPlayer);
+        try{
+            return !boardOptions.getTeamsIA().get(currentPlayer);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public static void main(String args[]) {
-        Board board = new Board("Boards/TestBoard1", ' ', 5, 5);
+        Board board = new Board("Boards/TestBoard1", ' ', 5, 5,new Options());
         board.printConsoleBoard(' ');
         System.out.println("\n");
         board.computeNextGeneration();
@@ -288,12 +299,7 @@ public class Board extends BaseBoard implements Cloneable{
         }
         board.setTeams(teams.clone());
         board.setCurrentPlayer(currentPlayer);
-        board.setTeamHumanPlayer(teamHumanPlayer);//cloning is useless
         return board;
-    }
-
-    public void setTeamHumanPlayer(LinkedList<Integer> teamHumanPlayer) {
-        this.teamHumanPlayer = teamHumanPlayer;
     }
 
     public void setCurrentPlayer(int currentPlayer) {
@@ -304,8 +310,5 @@ public class Board extends BaseBoard implements Cloneable{
         return currentPlayer;
     }
 
-    public LinkedList<Integer> getTeamHumanPlayer() {
-        return teamHumanPlayer;
-    }
 
 }

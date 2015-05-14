@@ -72,7 +72,7 @@ public class Team implements Cloneable {
                         int score = 0;
                         //Cell current = board.getCell(x, y); //never used
                         // move the cell on a temp board to be sure of the score result:
-                        Board tempBoard = new Board(board.getCellBoard().clone());
+                        Board tempBoard = new Board(board.getCellBoard().clone(),board.getBoardOptions());
                         tempBoard.moveCell(cells.get(i).getCoordinate(), new BoardPoint(x,y));
                         switch (tempBoard.cellNeighbour(x, y)/*-1/*itself*/) { //useless, already counted on cellNeighbour
                         case 2:

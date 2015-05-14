@@ -14,95 +14,37 @@ public class BaseBoard implements Cloneable {
     protected int height;
     protected Cell[][] cellBoard;
     protected int numberOfTeams;
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-    private int currentPlayer;
-    private int teamHumanPlayer;
-	private Team[] teams;
-
-    public void setCellBoard(Cell[][] cellBoard) {
-        this.cellBoard = cellBoard;
-        height = cellBoard.length;
-        width = cellBoard[0].length;
-    }
+    protected Options boardOptions;
 
     /**
-     * set a new cell board without changing anything else,
-     * all the others settings MUST be set by an other way
-     * (created for optimisation purpose)
-     * @param cellBoard the new cell board
-     */
-    public void basicallySetCellBoard(Cell[][] cellBoard){
-        this.cellBoard = cellBoard;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public Cell[][] getCellBoard() {
-        return cellBoard;
-    }
-
-    /**
-     * @param cellCoordinates coordinates of the cell on the board
-     * @return the cell at the given coordinates on the board
-     */
-    public Cell getCell(BoardPoint cellCoordinates){
-        return getCell(cellCoordinates.getX(),cellCoordinates.getY());
-    }
-
-    /**
-     * @param x abscissa position of the cell on the board
-     * @param y ordinate position of the cell on the board
-     * @return the cell at the given coordinates on the board
-     */
-    public Cell getCell(int x,int y){
-        if(x>=0 && x<width && y>=0 && y<height){
-            return cellBoard[y][x];
-        }
-        else{
-            return new Cell(0);//return a dead cell if it's out of the board
-        }
-    }
-
-    /**
-     * put the given cell at the given coordinates
-     * @param x abscissa position of the cell on the board
-     * @param y ordinate position of the cell on the board
-     * @param cell
-     */
-    public void setCell(int x, int y, Cell cell){
-        if(x>=0 && x<width && y>=0 && y<height){
-            cellBoard[y][x] = cell;//set the new cell
-            cellBoard[y][x].setCoordinate(new BoardPoint(x,y));
-        }
-    }
-
-    public void setCell(BoardPoint cellCoordinates, Cell cell){
-        setCell(cellCoordinates.getX(), cellCoordinates.getY(), cell);
-    }
-
-    /**
-     * random generator
+     * void board generator
      * @param w width
      * @param h height
      */
-    public BaseBoard(int w, int h){
-        init(randomBoard(w, h, 0.3));
+    public BaseBoard(int w, int h, Options boardOptions){
+        Cell[][] cells = new Cell[w][h];
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                cells[x][y] = new Cell(0,new BoardPoint(x,y));
+            }
+        }
+        this.boardOptions = boardOptions;
+        init(cells);
     }
 
-    public BaseBoard(Cell[][] cells){
+    public BaseBoard(Options gameOptions){
+        this.boardOptions = gameOptions;
+        Cell[][] cells = new Cell[boardOptions.getBoardWidth()][boardOptions.getBoardHeight()];
+        for (int x = 0; x < boardOptions.getBoardWidth(); x++) {
+            for (int y = 0; y < boardOptions.getBoardHeight(); y++) {
+                cells[x][y] = new Cell(0,new BoardPoint(x,y));
+            }
+        }
+        init(cells);
+    }
+
+    public BaseBoard(Cell[][] cells,Options boardOptions){
+        this.boardOptions = boardOptions;
         init(cells);
     }
 
@@ -113,7 +55,8 @@ public class BaseBoard implements Cloneable {
      * @param w width
      * @param h height
      */
-    public BaseBoard(String path, char sep, int w, int h) {
+    public BaseBoard(String path, char sep, int w, int h,Options boardOptions) {
+        this.boardOptions = boardOptions;
         loadBoardFromFile(path, sep, w, h);
     }
 
@@ -121,7 +64,8 @@ public class BaseBoard implements Cloneable {
      * @param path file path
      * @param sep separator between numbers
      */
-    public BaseBoard(String path, char sep){
+    public BaseBoard(String path, char sep, Options boardOptions){
+        this.boardOptions = boardOptions;
         loadBoardFromFile(path, sep, getBoardWidthFromFile(path, sep), getBoardHeightFromFile(path));
     }
 
@@ -150,8 +94,6 @@ public class BaseBoard implements Cloneable {
                         int n;
                         try {
                             n = Integer.parseInt(line.substring(a, a + 1) );
-                            if (n > numberOfTeams) 
-                                numberOfTeams = n;
                         }
                         catch (NumberFormatException e){
                             n = 0; //if the value is not numeric, as an error we set it to zero
@@ -280,7 +222,6 @@ public class BaseBoard implements Cloneable {
                 }
             }
         }
-        numberOfTeams = 2;
         return cells;
     }
 
@@ -359,7 +300,7 @@ public class BaseBoard implements Cloneable {
      * @return number of cell around the given position on a radius of 1
      */
     public int cellNeighbour(int cellX, int cellY){
-        return cellNeighbour(cellX,cellY,0);
+        return cellNeighbour(cellX, cellY, 0);
     }
 
     /**
@@ -383,6 +324,95 @@ public class BaseBoard implements Cloneable {
     public boolean isOnBoard(BoardPoint A){
         return A.getX()>=0 && A.getY()>=0 && A.getX()<cellBoard[0].length && A.getY()<cellBoard.length;
     }
+    public void setCellBoard(Cell[][] cellBoard) {
+        this.cellBoard = cellBoard;
+        height = cellBoard.length;
+        width = cellBoard[0].length;
+        for (int x = 0; x < cellBoard.length; x++) {
+            for (int y = 0; y < cellBoard[0].length; y++) {
+                if(numberOfTeams < cellBoard[x][y].getTeam()){
+                    numberOfTeams = cellBoard[x][y].getTeam();
+                }
+            }
+        }
+    }
+
+    /**
+     * set a new cell board without changing anything else,
+     * all the others settings MUST be set by an other way
+     * (created for optimisation purpose)
+     * @param cellBoard the new cell board
+     */
+    public void basicallySetCellBoard(Cell[][] cellBoard){
+        this.cellBoard = cellBoard;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public Cell[][] getCellBoard() {
+        return cellBoard;
+    }
+
+    /**
+     * @param cellCoordinates coordinates of the cell on the board
+     * @return the cell at the given coordinates on the board
+     */
+    public Cell getCell(BoardPoint cellCoordinates){
+        return getCell(cellCoordinates.getX(),cellCoordinates.getY());
+    }
+
+    /**
+     * @param x abscissa position of the cell on the board
+     * @param y ordinate position of the cell on the board
+     * @return the cell at the given coordinates on the board
+     */
+    public Cell getCell(int x,int y){
+        if(x>=0 && x<width && y>=0 && y<height){
+            return cellBoard[y][x];
+        }
+        else{
+            return new Cell(0);//return a dead cell if it's out of the board
+        }
+    }
+
+    /**
+     * put the given cell at the given coordinates
+     * @param x abscissa position of the cell on the board
+     * @param y ordinate position of the cell on the board
+     * @param cell
+     */
+    public void setCell(int x, int y, Cell cell){
+        if(x>=0 && x<width && y>=0 && y<height){
+            cellBoard[y][x] = cell;//set the new cell
+            cellBoard[y][x].setCoordinate(new BoardPoint(x,y));
+        }
+    }
+
+    public void setCell(BoardPoint cellCoordinates, Cell cell){
+        setCell(cellCoordinates.getX(), cellCoordinates.getY(), cell);
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setBoardOptions(Options boardOptions) {
+        this.boardOptions = boardOptions;
+    }
+
+    public Options getBoardOptions() {
+        return boardOptions;
+    }
 
     public BaseBoard clone(){
         BaseBoard baseBoard = null;
@@ -402,6 +432,7 @@ public class BaseBoard implements Cloneable {
         baseBoard.basicallySetCellBoard(cellBoardCopy);
         baseBoard.setHeight(height);
         baseBoard.setWidth(width);
+        baseBoard.setBoardOptions(boardOptions.clone());//the options can't change, use less to clone
         return baseBoard;
     }
 
