@@ -102,7 +102,7 @@ public class Board extends BaseBoard implements Cloneable{
         numberOfTeams = boardOptions.getTeamsIA().size()-1;
         teams = new Team[numberOfTeams+1]; //number of teams : 2 + 1 (dead cell team)
         for (int i = 0; i < teams.length; i++) {
-            teams[i]= new TeamBasicIA(boardOptions.getTeamsIA().get(i),this);
+            teams[i]= new Team(boardOptions.getTeamsIA().get(i),this);
         }
         for (int i=0; i<height; i++) {//put the team as they must be
             for (int j=0; j<width; j++) {
