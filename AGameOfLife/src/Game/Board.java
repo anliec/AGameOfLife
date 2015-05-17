@@ -111,7 +111,6 @@ public class Board extends BaseBoard implements Cloneable{
                     teams[cell.getTeam()].getCells().add(cell);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("error with team number "+cell.getTeam()+" there are "+teams.length+" teams");
                 }
             }
         }
