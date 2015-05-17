@@ -191,7 +191,7 @@ public class BaseBoard implements Cloneable {
      * @param cells cells array witch will be set as cellBoard
      */
     protected void init(Cell[][] cells){
-        generationNumber = 0;;
+        generationNumber = 0;
         setCellBoard(cells);
     }
 
@@ -244,6 +244,10 @@ public class BaseBoard implements Cloneable {
         System.out.println();
     }
 
+    public int cellExtendedNeighbour(BoardPoint point, int countTeam, int radius){
+        return cellExtendedNeighbour(point.getX(),point.getY(),countTeam,radius);
+    }
+
     /**
      * @param cellX abscissa position of the cell
      * @param cellY ordinate position of the cell
@@ -284,6 +288,10 @@ public class BaseBoard implements Cloneable {
         return neighbourCount;
     }
 
+    public int cellNaighbour(BoardPoint point, int countTeam){
+        return cellNeighbour(point.getX(),point.getY(),countTeam);
+    }
+
     /**
      * @param cellX abscissa position of the cell
      * @param cellY ordinate position of the cell
@@ -291,7 +299,11 @@ public class BaseBoard implements Cloneable {
      * @return number of cell around the given position belonging to to team given on a radius of 1
      */
     public int cellNeighbour(int cellX, int cellY, int countTeam){
-        return cellExtendedNeighbour(cellX,cellY,countTeam,1);
+        return cellExtendedNeighbour(cellX, cellY, countTeam, 1);
+    }
+
+    public int cellNeighbour(BoardPoint point){
+        return cellNeighbour(point.getX(),point.getY());
     }
 
     /**

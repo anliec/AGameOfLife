@@ -133,7 +133,7 @@ public class Team implements Cloneable {
                     BoardPoint currentPoint = new BoardPoint(cell.getCoordinate().getX()+x,cell.getCoordinate().getY()+y);
                     if(simulationBoard.isOnBoard(currentPoint) && !simulationBoard.getCell(currentPoint).isAlive()) {
                         Move currentMove = new Move(cell.getCoordinate(),currentPoint,0);
-                        currentMove.score = getScoreMove(currentMove, 5);
+                        currentMove.score = getScoreMove(currentMove, 7);
                         moves.add(currentMove);
                     }
                 }

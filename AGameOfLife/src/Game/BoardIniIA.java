@@ -30,28 +30,31 @@ public class BoardIniIA {
         board.setCell(firstCellPoint, new Cell(teamNumber, firstCellPoint));
         cellToPlace--;
 
-        LinkedList<ResultBoardAndScore> scoreBoard = new LinkedList<>();
-        BoardPoint currantPoint;
-        Board simulationBoard;
-        for (int x = xMin; x < xMax; x++) {
-            for (int y = yMin; y < yMax; y++) {
-                int neighbour = board.cellNeighbour(x,y);
-                if(neighbour>0 && neighbour<4){//don't look for cell in the midle of nothing or where it will die.
+        if (cellToPlace>0) { //if they are still cells to place (ok it's not a good game with only one cell)
+            LinkedList<ResultBoardAndScore> scoreBoard = new LinkedList<>();
+            BoardPoint currantPoint;
+            Board simulationBoard;
+            for (int x = xMin; x < xMax; x++) {
+                for (int y = yMin; y < yMax; y++) {
                     currantPoint = new BoardPoint(x,y);
-                    simulationBoard = board.clone();
-                    simulationBoard.setCell(currantPoint, new Cell(teamNumber, currantPoint));
-                    cellToPlace--;
-                    scoreBoard.add(getScorePosition(simulationBoard, cellToPlace));
+                    if(board.getCell(currantPoint).getTeam()==0){
+                        int neighbour = board.cellNeighbour(x,y);
+                        if(neighbour>0 && neighbour<4){//don't look for cell in the midle of nothing or where it will die.
+                            simulationBoard = board.clone();
+                            simulationBoard.setCell(currantPoint, new Cell(teamNumber, currantPoint));
+                            scoreBoard.add(getScorePosition(simulationBoard, cellToPlace-1));
+                        }
+                    }
                 }
             }
-        }
-        ResultBoardAndScore bestScore = scoreBoard.getFirst();
-        for (int i = 1; i < scoreBoard.size(); i++) {
-            if(scoreBoard.get(i).getScore()>bestScore.getScore()){
-                bestScore = scoreBoard.get(i);
+            ResultBoardAndScore bestScore = scoreBoard.getFirst();
+            for (int i = 1; i < scoreBoard.size(); i++) {
+                if(scoreBoard.get(i).getScore()>bestScore.getScore()){
+                    bestScore = scoreBoard.get(i);
+                }
             }
+            board = bestScore.getBoard();
         }
-        board = bestScore.getBoard();
     }
 
     public ResultBoardAndScore getScorePosition(Board currantBoard, int cellToPlace){
@@ -69,23 +72,31 @@ public class BoardIniIA {
             int neighbour;
             for (int x = xMin; x < xMax; x++) {
                 for (int y = yMin; y < yMax; y++) {
-                    neighbour = board.cellNeighbour(x,y);
-                    if(neighbour>0 && neighbour<4){//don't look for cell in the midle of nothing or where it will die.
-                        currantPoint = new BoardPoint(x,y);
-                        simulationBoard = currantBoard.clone();
-                        simulationBoard.setCell(currantPoint, new Cell(teamNumber, currantPoint));
-                        scoreBoard.add(getScorePosition(simulationBoard, cellToPlace - 1));
-                        //System.out.println("score: " + scoreBoard.getLast().getScore()+" cell left: "+cellToPlace);
+                    currantPoint = new BoardPoint(x,y);
+                    if(currantBoard.getCell(currantPoint).getTeam()==0){
+                        neighbour = board.cellNeighbour(currantPoint);
+                        if(neighbour>0 && neighbour<4){//don't look for cell in the middle of nothing or where it will die.
+                            currantPoint = new BoardPoint(x,y);
+                            simulationBoard = currantBoard.clone();
+                            simulationBoard.setCell(currantPoint, new Cell(teamNumber, currantPoint));
+                            scoreBoard.add(getScorePosition(simulationBoard, cellToPlace - 1));
+                            //System.out.println("score: " + scoreBoard.getLast().getScore()+" cell left: "+cellToPlace);
+                        }
+                    }
+
+                }
+            }
+            if (scoreBoard.size()>0) {
+                ResultBoardAndScore bestScore = scoreBoard.getFirst();
+                for (int i = 1; i < scoreBoard.size(); i++) {
+                    if(scoreBoard.get(i).getScore()>bestScore.getScore()){
+                        bestScore = scoreBoard.get(i);
                     }
                 }
+                return bestScore;
+            } else {
+                return new ResultBoardAndScore(currantBoard,0);//if there are no best score, return a score equal to 0
             }
-            ResultBoardAndScore bestScore = scoreBoard.getFirst();
-            for (int i = 1; i < scoreBoard.size(); i++) {
-                if(scoreBoard.get(i).getScore()>bestScore.getScore()){
-                    bestScore = scoreBoard.get(i);
-                }
-            }
-            return bestScore;
         }
     }
 
