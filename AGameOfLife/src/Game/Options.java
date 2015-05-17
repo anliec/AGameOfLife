@@ -20,7 +20,9 @@ public class Options implements Cloneable{
         teamsIA.add(true);//dead cell
         teamsIA.add(true);
         teamsIA.add(false);
-        //teamsIA.add(true);
+        teamsIA.add(true);
+        teamsIA.add(true);
+        //teamsIA.add(false);
     }
 
     public int getBoardHeight() {

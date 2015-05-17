@@ -134,7 +134,7 @@ public class MainWindows extends JFrame {
     }
 
     private void boardIni(int team, Board board){
-        if(team < board.getTeams().length){
+        if(team < gameOptions.getTeamsIA().size()){
             if(board.getTeam(team).isIA()){
                 BoardIniIA IAini = new BoardIniIA(board,team,gameOptions.getNumberOfCellBeginning());
                 IAini.iniBoard();
@@ -146,7 +146,7 @@ public class MainWindows extends JFrame {
                     remove(boardWidget);
                     remove(btNextGeneration);
                 }
-                catch (Exception e){
+                catch (Exception e){ // if boardWidget or btNextGeneration doesn't exist...
                 }
                 iniBoard = new GraphicBoardIni(board,team,gameOptions.getNumberOfCellBeginning());
                 boardWidget = iniBoard;

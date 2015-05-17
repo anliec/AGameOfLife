@@ -107,7 +107,12 @@ public class Board extends BaseBoard implements Cloneable{
         for (int i=0; i<height; i++) {//put the team as they must be
             for (int j=0; j<width; j++) {
                 Cell cell = cellBoard[i][j];
-                teams[cell.getTeam()].getCells().add(cell);
+                try {
+                    teams[cell.getTeam()].getCells().add(cell);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("error with team number "+cell.getTeam()+" there are "+teams.length+" teams");
+                }
             }
         }
     }
