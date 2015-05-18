@@ -10,6 +10,10 @@ public class Team implements Cloneable {
     protected boolean IA;
     protected boolean played;
     protected int teamNumber;
+    protected final int IAIterations = 7;
+    protected final double IAIntolerance = 0.8;
+    protected final int IADivider = 6;
+    protected int IAFloor = 1;
 
     public void setBoard(Board board) {
         this.board = board;
@@ -132,7 +136,9 @@ public class Team implements Cloneable {
                     BoardPoint currentPoint = new BoardPoint(cell.getCoordinate().getX()+x,cell.getCoordinate().getY()+y);
                     if(simulationBoard.isOnBoard(currentPoint) && !simulationBoard.getCell(currentPoint).isAlive()) {
                         Move currentMove = new Move(cell.getCoordinate(),currentPoint,0);
-                        currentMove.score = getScoreMove(currentMove, 7);
+                        int iter = IAIterations-cells.size()/IADivider;
+                        if(iter < IAFloor) iter = IAFloor;
+                        currentMove.score = getScoreMove(currentMove, iter);
                         moves.add(currentMove);
                     }
                 }
@@ -160,7 +166,7 @@ public class Team implements Cloneable {
         Board simulationBoard = sourceBoard.clone();
         if(simulationBoard.moveCell(move)){
             simulationBoard.computeNextGeneration();
-            if(simulationBoard.getTeam(getTeamNumber()).getCells().size() <= 0.9*sourceBoard.getTeam(getTeamNumber()).getCells().size()){
+            if(simulationBoard.getTeam(getTeamNumber()).getCells().size() <= IAIntolerance*sourceBoard.getTeam(getTeamNumber()).getCells().size()){
                 return 0;// if very bad move
             }
             else if(iteration == 0){
