@@ -67,10 +67,6 @@ public class Board extends BaseBoard implements Cloneable{
     }
 
 
-    /**
-     * @author team AGOL
-     * @Override
-     */
     public void setCellBoard(Cell[][] cellBoard) {
         super.setCellBoard(cellBoard);
         //clean up the teams:
@@ -230,10 +226,20 @@ public class Board extends BaseBoard implements Cloneable{
             return false;
     }
 
+    /**
+     * moves a cell from one point to another
+     * @param move which contains the origin and the destination
+     * @return if the move have been performed (if the rules authorized it)
+     */
     public boolean moveCell(Move move){
         return moveCell(move.from, move.to);
     }
 
+    /**
+     * moves a cell from one point to another according to player actions
+     * @param move
+     * @return if the move have been performed (if the rules authorized it)
+     */
     public boolean playCurrentHumanTurn(Move move){
         if(moveCell(move)){
             teams[currentPlayer].setPlayed(true);
@@ -243,12 +249,18 @@ public class Board extends BaseBoard implements Cloneable{
             return false;
     }
 
+    /**
+     * all in the title
+     */
     public void endHumanPlayerTurn(){
         if(isHumanPlayerPlaying()){
             endCurrentTurn();
         }
     }
 
+    /**
+     * all in the title
+     */
     public void endCurrentTurn(){
         currentPlayer++;
         if(currentPlayer<teams.length){
@@ -257,7 +269,7 @@ public class Board extends BaseBoard implements Cloneable{
         else if(boardOptions.getTeamsIA().contains(false)){
             nextTurn();
         }
-        //if there are no human player the game does't go to the next turn to prevent infinity loop
+        //if there are no human player the game doesn't go to the next turn to prevent infinity loop
     }
 
     public void playCurrentTurn(){

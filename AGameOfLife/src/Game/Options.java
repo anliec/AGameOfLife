@@ -62,6 +62,9 @@ public class Options implements Cloneable{
         this.numberOfCellBeginning = numberOfCellBeginning;
     }
 
+    /**
+     * 
+     */
     public Options clone(){
         Options clonedOption = null;
         try{

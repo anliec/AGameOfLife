@@ -25,7 +25,6 @@ public class MainWindows extends JFrame {
 
     /**
      * default constructor
-     * @author team AGOL
      */
     public MainWindows(){
         title=("A Game of Life");
