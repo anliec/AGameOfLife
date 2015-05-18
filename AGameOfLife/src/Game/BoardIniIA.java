@@ -47,13 +47,15 @@ public class BoardIniIA {
                     }
                 }
             }
-            ResultBoardAndScore bestScore = scoreBoard.getFirst();
-            for (int i = 1; i < scoreBoard.size(); i++) {
-                if(scoreBoard.get(i).getScore()>bestScore.getScore()){
-                    bestScore = scoreBoard.get(i);
+            if (scoreBoard.size()>0) {
+                ResultBoardAndScore bestScore = scoreBoard.getFirst();
+                for (int i = 1; i < scoreBoard.size(); i++) {
+                    if(scoreBoard.get(i).getScore()>bestScore.getScore()){
+                        bestScore = scoreBoard.get(i);
+                    }
                 }
+                board = bestScore.getBoard();
             }
-            board = bestScore.getBoard();
         }
     }
 

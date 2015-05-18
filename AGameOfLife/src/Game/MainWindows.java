@@ -47,7 +47,10 @@ public class MainWindows extends JFrame {
         pack();
         setVisible(true);
     }
-    
+
+    /**
+     * initialisation of the menu bar of the main window
+     */
     private void initMenuBar() {
         JMenu fileMenu = new JMenu("Fichier"),
                 toolsMenu = new JMenu("Outils"),
@@ -142,6 +145,7 @@ public class MainWindows extends JFrame {
                 boardIni(team + 1, board);
             }
             else{
+                System.out.println(" -human is placing cells");
                 try{
                     remove(boardWidget);
                     remove(btNextGeneration);
@@ -164,7 +168,7 @@ public class MainWindows extends JFrame {
                     }
                 });
                 add(btNextGeneration, BorderLayout.SOUTH);
-                pack();
+                this.setVisible(true);
             }
         }
         else{
@@ -207,6 +211,6 @@ public class MainWindows extends JFrame {
             }
         });
         boardWidget.getBoard().playCurrentTurn();
-        pack();
+        setVisible(true);
     }
 }

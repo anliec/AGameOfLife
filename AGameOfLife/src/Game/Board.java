@@ -199,7 +199,7 @@ public class Board extends BaseBoard implements Cloneable{
                             r++;
                         }
                         if(unSetCase){
-                            newCellTeam = (int)(Math.random()*teams.length+1.0);
+                            newCellTeam = 0;//(int)(Math.random()*teams.length+1.0);
                         }
                         newBoard[y][x] = new Cell(newCellTeam);
                     }

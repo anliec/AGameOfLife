@@ -49,6 +49,11 @@ public class Options implements Cloneable{
         this.teamsIA = teamsIA;
     }
 
+    public void setTeamsIAFromOptions(LinkedList<Boolean> teamsIAFromOptions){
+        setTeamsIA(teamsIAFromOptions);
+        teamsIA.addFirst(false); //add the dead team cell as an human player
+    }
+
     public int getNumberOfCellBeginning() {
         return numberOfCellBeginning;
     }
