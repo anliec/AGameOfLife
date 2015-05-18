@@ -167,13 +167,13 @@ public class Team implements Cloneable {
             else if(iteration == 0){
                 int friendNumber, ennemyNumber = 0;
                 friendNumber = simulationBoard.getTeam(getTeamNumber()).getCells().size();
-                for (int i=1; i<simulationBoard.getTeams().length; i++) {
+                /**for (int i=1; i<simulationBoard.getTeams().length; i++) {
                     if(teamNumber !=i) {
                         ennemyNumber += simulationBoard.getTeam(i).getCells().size();
-                        //System.out.println(ennemyNumber);
                     }
                 }
-                return friendNumber/(ennemyNumber+1);//classic score
+                System.out.println(ennemyNumber);*/
+                return friendNumber;/**-(ennemyNumber/3);*///classic score
             }
             else{
                 LinkedList<Move> moves = new LinkedList<Move>();
