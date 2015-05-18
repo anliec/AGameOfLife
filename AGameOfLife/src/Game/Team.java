@@ -61,7 +61,6 @@ public class Team implements Cloneable {
     
     /**
      * the IA make the best move it can
-     * @author Edern Haumont
      */
     public void playIA() {
         /*ArrayList<Move> moves = new ArrayList<Move>();

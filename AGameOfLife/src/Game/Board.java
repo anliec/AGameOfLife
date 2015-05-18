@@ -67,10 +67,6 @@ public class Board extends BaseBoard implements Cloneable{
     }
 
 
-    /**
-     * @author team AGOL
-     * @Override
-     */
     public void setCellBoard(Cell[][] cellBoard) {
         super.setCellBoard(cellBoard);
         //clean up the teams:
@@ -242,7 +238,7 @@ public class Board extends BaseBoard implements Cloneable{
     /**
      * moves a cell from one point to another according to player actions
      * @param move
-     * @returnif the move have been performed (if the rules authorized it)
+     * @return if the move have been performed (if the rules authorized it)
      */
     public boolean playCurrentHumanTurn(Move move){
         if(moveCell(move)){
