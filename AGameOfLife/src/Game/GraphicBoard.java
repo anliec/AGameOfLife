@@ -60,6 +60,7 @@ public class GraphicBoard extends JPanel {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 setSquareSize();
+                repaint();
             }
         });
         addMouseListener(new MouseListener() {

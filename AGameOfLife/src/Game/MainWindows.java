@@ -158,7 +158,6 @@ public class MainWindows extends JFrame {
                 boardIni(team + 1, board);
             }
             else{
-                System.out.println(" -human is placing cells");
                 try{
                     remove(boardWidget);
                     remove(btNextGeneration);
