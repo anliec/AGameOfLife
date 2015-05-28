@@ -14,7 +14,11 @@ import javax.swing.*;
  */
 public class MainWindows extends JFrame {
 
+    private final int WIDGET_WIDTH = 600;
+    private final int WIDGET_HEIGHT = 600;
+
     protected Options gameOptions;
+    protected OptionWindow optionWindow;
     protected GraphicBoard boardWidget;
     protected GraphicBoardIni iniBoard;
     protected Button btNextGeneration;
@@ -38,6 +42,8 @@ public class MainWindows extends JFrame {
         setJMenuBar(menuBar);
         //load file selection window
         fc = new JFileChooser("Boards");
+        //load options windows
+        optionWindow = new OptionWindow();
 
         setPlayMode(new Board(gameOptions));
         btNextGeneration.setEnabled(false);
@@ -89,7 +95,7 @@ public class MainWindows extends JFrame {
         });
         optionsMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                OptionWindow options = new OptionWindow();
+                optionWindow.setVisible(true);
             }
         });
         fileMenu.add(newMenuItem);
@@ -166,7 +172,7 @@ public class MainWindows extends JFrame {
                 }
                 iniBoard = new GraphicBoardIni(board,team,gameOptions.getNumberOfCellBeginning());
                 boardWidget = iniBoard;
-                boardWidget.setPreferredSize(new Dimension(300, 300));
+                boardWidget.setPreferredSize(new Dimension(WIDGET_WIDTH, WIDGET_HEIGHT));
                 add(boardWidget, BorderLayout.CENTER);
                 btNextGeneration = new Button("OK");
                 ///actionListener
@@ -200,7 +206,7 @@ public class MainWindows extends JFrame {
      * set the interface in playing mode
      * @param board the board which will be showed at the first turn
      */
-    public void setPlayMode(Board board){
+    public void setPlayMode(final Board board){
         System.out.println("play mode");
         try{
             remove(boardWidget);
@@ -210,7 +216,7 @@ public class MainWindows extends JFrame {
 
         }
         boardWidget = new GraphicBoard(board);
-        boardWidget.setPreferredSize(new Dimension(300, 300));
+        boardWidget.setPreferredSize(new Dimension(WIDGET_WIDTH, WIDGET_HEIGHT));
         add(boardWidget, BorderLayout.CENTER);
         btNextGeneration = new Button("End Turn");
         add(btNextGeneration, BorderLayout.SOUTH);
@@ -223,6 +229,9 @@ public class MainWindows extends JFrame {
                     boardWidget.unselectCell();
                     boardWidget.getBoard().endHumanPlayerTurn();
                     boardWidget.repaint();
+                    if(!board.isAHumanPlayerAlive()){
+                        EndOfGame();
+                    }
                 }
                 title = "A Game of Life";
                 title += " - Player : " + boardWidget.getBoard().getCurrentPlayer();
@@ -231,5 +240,9 @@ public class MainWindows extends JFrame {
         });
         boardWidget.getBoard().playCurrentTurn();
         setVisible(true);
+    }
+
+    public void EndOfGame(){
+
     }
 }

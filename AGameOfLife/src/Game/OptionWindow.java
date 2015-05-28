@@ -5,44 +5,46 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class OptionWindow extends JFrame{
-    JPanel ComboPanel;
-    JPanel player1;
-    JPanel player2;
-    JPanel player3;
-    JPanel player4;
-    
-    JButton OK;
-    
+public class OptionWindow extends JFrame {
+    protected JPanel ComboPanel;
+    protected JPanel player1;
+    protected JPanel player2;
+    protected JPanel player3;
+    protected JPanel player4;
+
+    protected JButton OK;
+
     private JLabel Label1;
     private JLabel Label2;
     private JLabel Label3;
     private JLabel Label4;
     private JLabel Combo;
-    
+
     /*String[]PlayerNumber;*/
-    JComboBox<String> ChoiceNumber;
-    
-    JTextField round;//number of rounds
-    JTextField cell;//number of cells
-    JButton Exit;
-    
+    protected JComboBox<String> ChoiceNumber;
+
+    protected JTextField round;//number of rounds
+    protected JTextField cell;//number of cells
+    protected JButton Exit;
+
     private JCheckBox[] PlayerOption = new JCheckBox[8];
-    
-    FlowLayout C;//ComboBox
-    FlowLayout P1;
-    FlowLayout P2;
-    FlowLayout P3;
-    FlowLayout P4;
-    
-    GridLayout gridLayoutPrincipal;
-    
-    LinkedList<Boolean> Players;
+
+    protected FlowLayout C;//ComboBox
+    protected FlowLayout P1;
+    protected FlowLayout P2;
+    protected FlowLayout P3;
+    protected FlowLayout P4;
+
+    protected GridLayout gridLayoutPrincipal;
+
+    protected LinkedList<Boolean> Players;
+
+    protected Options options;
 
     public OptionWindow() {
         setSize(new Dimension(1200, 900));
         setTitle("Options");
-        gridLayoutPrincipal = new GridLayout(8, 1);
+        gridLayoutPrincipal = new GridLayout(6, 1);
         getContentPane().setLayout(gridLayoutPrincipal);
 
         C = new FlowLayout(2);
@@ -112,8 +114,8 @@ public class OptionWindow extends JFrame{
         player4.add(PlayerOption[7]);
         add(player4);
         player4.setVisible(false);
-        
-        for(int i=0; i<PlayerOption.length; i++){
+
+        for (int i = 0; i < PlayerOption.length; i++) {
             PlayerOption[i].addActionListener(new ItemAction3());
         }
 
@@ -122,132 +124,135 @@ public class OptionWindow extends JFrame{
         add(OK);
         OK.addItemListener(new ItemState());
         OK.addActionListener(new ItemAction2());
-        
+
         Players = new LinkedList<Boolean>();
+        options = new Options();
 
         pack();
-        setVisible(true);
+        setVisible(false);
     }
-        
-        public class ItemAction implements ActionListener {
-                public void actionPerformed(ActionEvent e){
-                        if (ChoiceNumber.getSelectedItem().equals("1 player")){
-                                player1.setVisible(true);
-                                player2.setVisible(false);
-                                player3.setVisible(false);
-                                player4.setVisible(false);
-                        }
-                        if (ChoiceNumber.getSelectedItem().equals("2 players")){
-                                player1.setVisible(true);
-                                player2.setVisible(true);
-                                player3.setVisible(false);
-                                player4.setVisible(false);
-                        }
-                        if (ChoiceNumber.getSelectedItem().equals("3 players")){
-                                player1.setVisible(true);
-                                player2.setVisible(true);
-                                player3.setVisible(true);
-                                player4.setVisible(false);
-                        }
-                        if (ChoiceNumber.getSelectedItem().equals("4 players")){
-                                player1.setVisible(true);
-                                player2.setVisible(true);
-                                player3.setVisible(true);
-                                player4.setVisible(true);
-                        }
-                }
-        }//ActionListener
-        
-        public class ItemAction2 implements ActionListener {
-                public void actionPerformed(ActionEvent e){
-                        if (PlayerOption[0].isSelected() == true){
-                        Players.add(true);
-                        PlayerOption[1].setSelected(false);
-                        System.out.println("true1");
-                            }
-                            if (PlayerOption[1].isSelected() == true){
-                        Players.add(false);
-                        PlayerOption[0].setSelected(false);
-                        System.out.println("false1");
-                            }
-                            if (PlayerOption[2].isSelected() == true){
-                        Players.add(true);
-                        PlayerOption[3].setSelected(false);
-                        System.out.println("true2");
-                            }
-                            if (PlayerOption[3].isSelected() == true){
-                        Players.add(false);
-                        PlayerOption[2].setSelected(false);
-                        System.out.println("false2");
-                            }
-                            if (PlayerOption[4].isSelected() == true){
-                        Players.add(true);
-                        PlayerOption[5].setSelected(false);
-                        System.out.println("true3");
-                            }
-                            if (PlayerOption[5].isSelected() == true){
-                        Players.add(false);
-                        PlayerOption[4].setSelected(false);
-                        System.out.println("false3");
-                            }
-                            if (PlayerOption[6].isSelected() == true){
-                        Players.add(true);
-                        PlayerOption[7].setSelected(false);
-                        System.out.println("true4");
-                            }
-                            if (PlayerOption[7].isSelected() == true){
-                        Players.add(false);
-                        PlayerOption[6].setSelected(false);
-                        System.out.println("false4");
-                            }
-                        System.exit(0);                        
-                }
-        }//ItemAction2
-        
-        public class ItemState implements ItemListener{
-                public void itemStateChanged(ItemEvent e){
-                        System.out.println(e.getItem());
-                }
-        }//ItemListener
-        
-        public class ItemAction3 implements ActionListener {
-                public void actionPerformed(ActionEvent e){
-                        
-                        //true = real player ; false = IA player
-                        if (PlayerOption[0].isSelected() == true){
-                    PlayerOption[1].setSelected(false);
-                    
-                        }
-                        if (PlayerOption[1].isSelected() == true){
-                    PlayerOption[0].setSelected(false);
-                        }
-                        if (PlayerOption[2].isSelected() == true){
-                    PlayerOption[3].setSelected(false);
-                        }
-                        if (PlayerOption[3].isSelected() == true){
-                    PlayerOption[2].setSelected(false);
-                        }
-                        if (PlayerOption[4].isSelected() == true){
-                    PlayerOption[5].setSelected(false);
-                        }
-                        if (PlayerOption[5].isSelected() == true){
-                    PlayerOption[4].setSelected(false);
-                        }
-                        if (PlayerOption[6].isSelected() == true){
-                    PlayerOption[7].setSelected(false);
-                        }
-                        if (PlayerOption[7].isSelected() == true){
-                    PlayerOption[6].setSelected(false);
-                        }
-            
-                }
+
+    public class ItemAction implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            if (ChoiceNumber.getSelectedItem().equals("1 player")) {
+                player1.setVisible(true);
+                player2.setVisible(false);
+                player3.setVisible(false);
+                player4.setVisible(false);
+            }
+            if (ChoiceNumber.getSelectedItem().equals("2 players")) {
+                player1.setVisible(true);
+                player2.setVisible(true);
+                player3.setVisible(false);
+                player4.setVisible(false);
+            }
+            if (ChoiceNumber.getSelectedItem().equals("3 players")) {
+                player1.setVisible(true);
+                player2.setVisible(true);
+                player3.setVisible(true);
+                player4.setVisible(false);
+            }
+            if (ChoiceNumber.getSelectedItem().equals("4 players")) {
+                player1.setVisible(true);
+                player2.setVisible(true);
+                player3.setVisible(true);
+                player4.setVisible(true);
+            }
         }
-        
-        //test
-         public static void main (String args[]) {
-         
-         OptionWindow maFrame= new OptionWindow();
-                 
-         }
-        
+    }//ActionListener
+
+    public class ItemAction2 implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            if (PlayerOption[0].isSelected() == true) {
+                Players.add(true);
+                PlayerOption[1].setSelected(false);
+                //System.out.println("true1");
+            }
+            if (PlayerOption[1].isSelected() == true) {
+                Players.add(false);
+                PlayerOption[0].setSelected(false);
+                //System.out.println("false1");
+            }
+            if (PlayerOption[2].isSelected() == true) {
+                Players.add(true);
+                PlayerOption[3].setSelected(false);
+                //System.out.println("true2");
+            }
+            if (PlayerOption[3].isSelected() == true) {
+                Players.add(false);
+                PlayerOption[2].setSelected(false);
+                //System.out.println("false2");
+            }
+            if (PlayerOption[4].isSelected() == true) {
+                Players.add(true);
+                PlayerOption[5].setSelected(false);
+                //System.out.println("true3");
+            }
+            if (PlayerOption[5].isSelected() == true) {
+                Players.add(false);
+                PlayerOption[4].setSelected(false);
+                //System.out.println("false3");
+            }
+            if (PlayerOption[6].isSelected() == true) {
+                Players.add(true);
+                PlayerOption[7].setSelected(false);
+                //System.out.println("true4");
+            }
+            if (PlayerOption[7].isSelected() == true) {
+                Players.add(false);
+                PlayerOption[6].setSelected(false);
+                //System.out.println("false4");
+            }
+            setVisible(false);
+        }
+    }//ItemAction2
+
+    public class ItemState implements ItemListener {
+        public void itemStateChanged(ItemEvent e) {
+            System.out.println(e.getItem());
+        }
+    }//ItemListener
+
+    public class ItemAction3 implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+
+            //true = real player ; false = IA player
+            if (PlayerOption[0].isSelected() == true) {
+                PlayerOption[1].setSelected(false);
+            }
+            if (PlayerOption[1].isSelected() == true) {
+                PlayerOption[0].setSelected(false);
+            }
+            if (PlayerOption[2].isSelected() == true) {
+                PlayerOption[3].setSelected(false);
+            }
+            if (PlayerOption[3].isSelected() == true) {
+                PlayerOption[2].setSelected(false);
+            }
+            if (PlayerOption[4].isSelected() == true) {
+                PlayerOption[5].setSelected(false);
+            }
+            if (PlayerOption[5].isSelected() == true) {
+                PlayerOption[4].setSelected(false);
+            }
+            if (PlayerOption[6].isSelected() == true) {
+                PlayerOption[7].setSelected(false);
+            }
+            if (PlayerOption[7].isSelected() == true) {
+                PlayerOption[6].setSelected(false);
+            }
+        }
+    }
+
+    public Options getOptions(){
+        return options;
+    }
+
+    //test
+    /*public static void main(String args[]) {
+
+        OptionWindow maFrame = new OptionWindow();
+
+    }*/
+
 }

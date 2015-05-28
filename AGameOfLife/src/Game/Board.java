@@ -96,7 +96,7 @@ public class Board extends BaseBoard implements Cloneable{
      */
     public void reloadTeams(){
         numberOfTeams = boardOptions.getTeamsIA().size()-1;
-        teams = new Team[numberOfTeams+1]; //number of teams : 2 + 1 (dead cell team)
+        teams = new Team[numberOfTeams+1]; //number of teams + 1 (dead cell team)
         for (int i = 0; i < teams.length; i++) {
             teams[i]= new Team(boardOptions.getTeamsIA().get(i),this);
         }
@@ -296,6 +296,27 @@ public class Board extends BaseBoard implements Cloneable{
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean isPlayerAlive(int playerNumber){
+        if(playerNumber > 0 && playerNumber < teams.length){
+            reloadTeams();
+            return teams[playerNumber].getCells().size() != 0;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean isAHumanPlayerAlive(){
+        for (int i = 0; i < teams.length; i++) {
+            if(!teams[i].isIA()){
+                if(isPlayerAlive(i)){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static void main(String args[]) {
