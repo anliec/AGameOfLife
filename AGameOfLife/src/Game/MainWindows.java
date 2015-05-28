@@ -136,6 +136,7 @@ public class MainWindows extends JFrame {
     public void initialisationOfTheBoard(){
         System.out.println("init board");
         //board initialisation:
+        gameOptions = optionWindow.getOptions();
         Board board = new Board(gameOptions);
         Team[] teams = new Team[gameOptions.getTeamsIA().size()];
         teams[0] = board.getTeam(0);//get the dead cell team witch is correctly set

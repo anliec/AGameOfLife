@@ -6,13 +6,13 @@ import java.awt.event.*;
 import java.util.*;
 
 public class OptionWindow extends JFrame {
-    protected JPanel ComboPanel;
-    protected JPanel player1;
-    protected JPanel player2;
-    protected JPanel player3;
-    protected JPanel player4;
+    JPanel ComboPanel;
+    JPanel player1;
+    JPanel player2;
+    JPanel player3;
+    JPanel player4;
 
-    protected JButton OK;
+    JButton OK;
 
     private JLabel Label1;
     private JLabel Label2;
@@ -21,30 +21,37 @@ public class OptionWindow extends JFrame {
     private JLabel Combo;
 
     /*String[]PlayerNumber;*/
-    protected JComboBox<String> ChoiceNumber;
+    JComboBox<String> ChoiceNumber;
 
-    protected JTextField round;//number of rounds
-    protected JTextField cell;//number of cells
-    protected JButton Exit;
+    JSpinner CellNumber;//number of cells
+    JSpinner BoardHeight;//number of cells
+    JSpinner BoardWidth;//number of cells
+    JButton Exit;
 
-    private JCheckBox[] PlayerOption = new JCheckBox[8];
+    private JRadioButton[] PlayerOption = new JRadioButton[8];
+    private ButtonGroup[] PlayerOptionGroup = new ButtonGroup[4];
 
-    protected FlowLayout C;//ComboBox
-    protected FlowLayout P1;
-    protected FlowLayout P2;
-    protected FlowLayout P3;
-    protected FlowLayout P4;
+    FlowLayout C;//ComboBox
+    FlowLayout P1;
+    FlowLayout P2;
+    FlowLayout P3;
+    FlowLayout P4;
+    //JFrame frame= new JFrame("JSpinner");//
 
-    protected GridLayout gridLayoutPrincipal;
 
-    protected LinkedList<Boolean> Players;
+    BoxLayout gridLayoutPrincipal;
 
-    protected Options options;
+    LinkedList<Boolean> Players;
+    int numberOfPlayers;
+
+    Options Op;
+    Integer numberofcell;
 
     public OptionWindow() {
         setSize(new Dimension(1200, 900));
+        setMinimumSize(new Dimension(275, 300));
         setTitle("Options");
-        gridLayoutPrincipal = new GridLayout(6, 1);
+        gridLayoutPrincipal = new BoxLayout(this.getContentPane(),BoxLayout.PAGE_AXIS);
         getContentPane().setLayout(gridLayoutPrincipal);
 
         C = new FlowLayout(2);
@@ -56,77 +63,127 @@ public class OptionWindow extends JFrame {
          */
         ChoiceNumber = new JComboBox<>();
         Combo = new JLabel("Number of players : ");
-        ChoiceNumber.addItem("1 player");
+        //ChoiceNumber.addItem("1 player");
         ChoiceNumber.addItem("2 players");
         ChoiceNumber.addItem("3 players");
         ChoiceNumber.addItem("4 players");
         ComboPanel.add(Combo);
         ComboPanel.add(ChoiceNumber);
         add(ComboPanel);
-        ChoiceNumber.addItemListener(new ItemState());
         ChoiceNumber.addActionListener(new ItemAction());
 
+        for (int i = 0; i < PlayerOptionGroup.length; i++) {
+            PlayerOptionGroup[i] = new ButtonGroup();
+        }
+
         player1 = new JPanel();
-        P1 = new FlowLayout(4);
-        player1.setLayout(P1);
+        player1.setLayout(new BoxLayout(player1,BoxLayout.LINE_AXIS));
         Label1 = new JLabel("Player 1 : ");
-        PlayerOption[0] = new JCheckBox("RL player");
-        PlayerOption[1] = new JCheckBox("IA player");
+        PlayerOption[0] = new JRadioButton("RL player");
+        PlayerOption[1] = new JRadioButton("AI player");
+        player1.add(Box.createHorizontalGlue());
         player1.add(Label1);
         player1.add(PlayerOption[0]);
         player1.add(PlayerOption[1]);
-        /* player1.add(PlayerOption[2]); */
+        player1.add(Box.createHorizontalGlue());
         add(player1);
+        PlayerOptionGroup[0].add(PlayerOption[0]);
+        PlayerOptionGroup[0].add(PlayerOption[1]);
+        PlayerOption[0].setSelected(true);
         player1.setVisible(true);
 
         player2 = new JPanel();
-        P2 = new FlowLayout(4);
-        player2.setLayout(P2);
+        player2.setLayout(new BoxLayout(player2,BoxLayout.LINE_AXIS));
         Label2 = new JLabel("Player 2 : ");
-        PlayerOption[2] = new JCheckBox("RL player");
-        PlayerOption[3] = new JCheckBox("IA player");
+        PlayerOption[2] = new JRadioButton("RL player");
+        PlayerOption[3] = new JRadioButton("AI player");
+        player2.add(Box.createHorizontalGlue());
         player2.add(Label2);
         player2.add(PlayerOption[2]);
         player2.add(PlayerOption[3]);
+        player2.add(Box.createHorizontalGlue());
         add(player2);
-        player2.setVisible(false);
+        PlayerOptionGroup[1].add(PlayerOption[2]);
+        PlayerOptionGroup[1].add(PlayerOption[3]);
+        PlayerOption[3].setSelected(true);
+        player2.setVisible(true);
 
         player3 = new JPanel();
-        P3 = new FlowLayout(4);
-        player3.setLayout(P3);
+        player3.setLayout(new BoxLayout(player3,BoxLayout.LINE_AXIS));
         Label3 = new JLabel("Player 3 : ");
-        PlayerOption[4] = new JCheckBox("RL player");
-        PlayerOption[5] = new JCheckBox("IA player");
+        PlayerOption[4] = new JRadioButton("RL player");
+        PlayerOption[5] = new JRadioButton("AI player");
+        player3.add(Box.createHorizontalGlue());
         player3.add(Label3);
         player3.add(PlayerOption[4]);
         player3.add(PlayerOption[5]);
+        player3.add(Box.createHorizontalGlue());
         add(player3);
+        PlayerOptionGroup[2].add(PlayerOption[4]);
+        PlayerOptionGroup[2].add(PlayerOption[5]);
+        PlayerOption[5].setSelected(true);
         player3.setVisible(false);
 
         player4 = new JPanel();
-        P4 = new FlowLayout(4);
-        player4.setLayout(P4);
+        player4.setLayout(new BoxLayout(player4,BoxLayout.LINE_AXIS));
         Label4 = new JLabel("Player 4 : ");
-        PlayerOption[6] = new JCheckBox("RL player");
-        PlayerOption[7] = new JCheckBox("IA player");
+        PlayerOption[6] = new JRadioButton("RL player");
+        PlayerOption[7] = new JRadioButton("AI player");
+        player4.add(Box.createHorizontalGlue());
         player4.add(Label4);
         player4.add(PlayerOption[6]);
         player4.add(PlayerOption[7]);
+        player4.add(Box.createHorizontalGlue());
         add(player4);
+        PlayerOptionGroup[3].add(PlayerOption[6]);
+        PlayerOptionGroup[3].add(PlayerOption[7]);
+        PlayerOption[7].setSelected(true);
         player4.setVisible(false);
 
-        for (int i = 0; i < PlayerOption.length; i++) {
-            PlayerOption[i].addActionListener(new ItemAction3());
-        }
+        add(Box.createVerticalGlue());
 
+        numberofcell = 0;
+        SpinnerModel model1 = new SpinnerNumberModel(5, 5, 10, 1);
+        CellNumber = new JSpinner(model1);
+        JLabel label1 = new JLabel("Number of cells : ");
+        JPanel panel1 = new JPanel();
+        panel1.setLayout(new BoxLayout(panel1,BoxLayout.LINE_AXIS));
+        panel1.add(Box.createHorizontalGlue());
+        panel1.add(label1);
+        panel1.add(CellNumber);
+        panel1.add(Box.createHorizontalGlue());
+        add(panel1);
+
+        SpinnerModel model2 = new SpinnerNumberModel(10, 10, 20, 1);
+        SpinnerModel model3 = new SpinnerNumberModel(10, 10, 20, 1);
+        BoardHeight = new JSpinner(model2);
+        BoardWidth = new JSpinner(model3);
+        JLabel labelBoardWdith = new JLabel("board width : ");
+        JLabel labelBoardHeight = new JLabel("board height : ");
+        JPanel panelBoardWdith = new JPanel();
+        JPanel panelBoardHeight = new JPanel();
+        panelBoardHeight.setLayout(new BoxLayout(panelBoardHeight,BoxLayout.LINE_AXIS));
+        panelBoardWdith.setLayout(new BoxLayout(panelBoardWdith,BoxLayout.LINE_AXIS));
+        panelBoardWdith.add(Box.createHorizontalGlue());
+        panelBoardWdith.add(labelBoardWdith);
+        panelBoardWdith.add(BoardWidth);
+        panelBoardWdith.add(Box.createHorizontalGlue());
+        add(panelBoardWdith);
+
+        panelBoardHeight.add(Box.createHorizontalGlue());
+        panelBoardHeight.add(labelBoardHeight);
+        panelBoardHeight.add(BoardHeight);
+        panelBoardHeight.add(Box.createHorizontalGlue());
+        add(panelBoardHeight);
+
+        add(Box.createVerticalGlue());
 
         OK = new JButton("OK");
         add(OK);
-        OK.addItemListener(new ItemState());
         OK.addActionListener(new ItemAction2());
 
-        Players = new LinkedList<Boolean>();
-        options = new Options();
+        Op = new Options();
+        numberOfPlayers = 2;
 
         pack();
         setVisible(false);
@@ -134,125 +191,58 @@ public class OptionWindow extends JFrame {
 
     public class ItemAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if (ChoiceNumber.getSelectedItem().equals("1 player")) {
-                player1.setVisible(true);
-                player2.setVisible(false);
-                player3.setVisible(false);
-                player4.setVisible(false);
-            }
             if (ChoiceNumber.getSelectedItem().equals("2 players")) {
                 player1.setVisible(true);
                 player2.setVisible(true);
                 player3.setVisible(false);
                 player4.setVisible(false);
+                numberOfPlayers = 2;
             }
             if (ChoiceNumber.getSelectedItem().equals("3 players")) {
                 player1.setVisible(true);
                 player2.setVisible(true);
                 player3.setVisible(true);
                 player4.setVisible(false);
+                numberOfPlayers = 3;
             }
             if (ChoiceNumber.getSelectedItem().equals("4 players")) {
                 player1.setVisible(true);
                 player2.setVisible(true);
                 player3.setVisible(true);
                 player4.setVisible(true);
+                numberOfPlayers = 4;
             }
         }
     }//ActionListener
 
+    public void BoutonOK() {
+
+        Players = new LinkedList<>();
+        Players.add(false); //dead team cell
+
+        for (int i = 0; i < PlayerOption.length; i+=2) {
+            if(numberOfPlayers > i/2){
+                Players.add(!PlayerOption[i].isSelected());
+            }
+        }
+
+        Op.setTeamsIA(Players);
+        Op.setNumberOfCellBeginning((int) CellNumber.getValue());
+        Op.setBoardWidth((int) BoardWidth.getValue());
+        Op.setBoardHeight((int) BoardHeight.getValue());
+        System.out.println("number of teams:"+(Players.size()-1));
+        setVisible(false);
+    }//boutonOK
+
     public class ItemAction2 implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if (PlayerOption[0].isSelected() == true) {
-                Players.add(true);
-                PlayerOption[1].setSelected(false);
-                //System.out.println("true1");
-            }
-            if (PlayerOption[1].isSelected() == true) {
-                Players.add(false);
-                PlayerOption[0].setSelected(false);
-                //System.out.println("false1");
-            }
-            if (PlayerOption[2].isSelected() == true) {
-                Players.add(true);
-                PlayerOption[3].setSelected(false);
-                //System.out.println("true2");
-            }
-            if (PlayerOption[3].isSelected() == true) {
-                Players.add(false);
-                PlayerOption[2].setSelected(false);
-                //System.out.println("false2");
-            }
-            if (PlayerOption[4].isSelected() == true) {
-                Players.add(true);
-                PlayerOption[5].setSelected(false);
-                //System.out.println("true3");
-            }
-            if (PlayerOption[5].isSelected() == true) {
-                Players.add(false);
-                PlayerOption[4].setSelected(false);
-                //System.out.println("false3");
-            }
-            if (PlayerOption[6].isSelected() == true) {
-                Players.add(true);
-                PlayerOption[7].setSelected(false);
-                //System.out.println("true4");
-            }
-            if (PlayerOption[7].isSelected() == true) {
-                Players.add(false);
-                PlayerOption[6].setSelected(false);
-                //System.out.println("false4");
-            }
-            setVisible(false);
+            BoutonOK();
         }
     }//ItemAction2
 
-    public class ItemState implements ItemListener {
-        public void itemStateChanged(ItemEvent e) {
-            System.out.println(e.getItem());
-        }
-    }//ItemListener
-
-    public class ItemAction3 implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-
-            //true = real player ; false = IA player
-            if (PlayerOption[0].isSelected() == true) {
-                PlayerOption[1].setSelected(false);
-            }
-            if (PlayerOption[1].isSelected() == true) {
-                PlayerOption[0].setSelected(false);
-            }
-            if (PlayerOption[2].isSelected() == true) {
-                PlayerOption[3].setSelected(false);
-            }
-            if (PlayerOption[3].isSelected() == true) {
-                PlayerOption[2].setSelected(false);
-            }
-            if (PlayerOption[4].isSelected() == true) {
-                PlayerOption[5].setSelected(false);
-            }
-            if (PlayerOption[5].isSelected() == true) {
-                PlayerOption[4].setSelected(false);
-            }
-            if (PlayerOption[6].isSelected() == true) {
-                PlayerOption[7].setSelected(false);
-            }
-            if (PlayerOption[7].isSelected() == true) {
-                PlayerOption[6].setSelected(false);
-            }
-        }
-    }
 
     public Options getOptions(){
-        return options;
+        return Op;
     }
-
-    //test
-    /*public static void main(String args[]) {
-
-        OptionWindow maFrame = new OptionWindow();
-
-    }*/
 
 }
