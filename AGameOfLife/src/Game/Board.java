@@ -309,14 +309,34 @@ public class Board extends BaseBoard implements Cloneable{
     }
 
     public boolean isAHumanPlayerAlive(){
-        for (int i = 0; i < teams.length; i++) {
+        for (int i = 1; i < teams.length; i++) {
             if(!teams[i].isIA()){
                 if(isPlayerAlive(i)){
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
+    }
+
+    public int numberOfPlayerAlive(){
+        int ret=0;
+        for (int i = 1; i < teams.length; i++) {
+            if(isPlayerAlive(i))
+                ret++;
+        }
+        return ret;
+    }
+
+    public int lastPlayerAlive(){
+        if(numberOfPlayerAlive()!=1){
+            return 0; // if there are more than one player alive
+        }
+        for (int i = 1; i < teams.length; i++) {
+            if(isPlayerAlive(i))
+                return i;
+        }
+        return 0; //if there are no player alive (can't append do to the first if)
     }
 
     public static void main(String args[]) {

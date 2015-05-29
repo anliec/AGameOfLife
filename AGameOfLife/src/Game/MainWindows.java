@@ -230,9 +230,7 @@ public class MainWindows extends JFrame {
                     btNextGeneration.setEnabled(false);
                     boardWidget.endHumanPlayerTurn();
                     btNextGeneration.setEnabled(true);
-                    /*if(!boardWidget.getBoard().isAHumanPlayerAlive()){ // /!\ bug on isAHumanPlayerAlive()
-                        EndOfGame();
-                    }*/
+                    endOfGameManagement();
                 }
                 title = "A Game of Life";
                 title += " - Player : " + boardWidget.getBoard().getCurrentPlayer();
@@ -243,9 +241,32 @@ public class MainWindows extends JFrame {
         setVisible(true);
     }
 
-    public void EndOfGame(){
+    public void endOfGameManagement(){
+        if(!boardWidget.getBoard().isAHumanPlayerAlive()){ // /!\ bug on isAHumanPlayerAlive()
+            gameOver();
+        }
+        else{
+            int numberOfPlayerAlive = boardWidget.getBoard().numberOfPlayerAlive();
+            if(numberOfPlayerAlive == 0){
+                gameOver();
+            }
+            else if(numberOfPlayerAlive == 1){
+                victory(boardWidget.getBoard().lastPlayerAlive());
+            }
+        }
+    }
+
+    public void victory(int teamNumber){
+        boardWidget.addNotification("Player "+teamNumber+" win !!!", 10000);
+        endOfGame();
+    }
+
+    public void gameOver(){
         boardWidget.addNotification("Game Over", 10000);
-        boardWidget.repaint();
+        endOfGame();
+    }
+
+    public void endOfGame(){
         btNextGeneration.setEnabled(false);
     }
 }

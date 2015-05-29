@@ -315,8 +315,13 @@ public class GraphicBoard extends JPanel {
         addNotification("AI is thinking...", 1000);
         unselectCell();
         board.endHumanPlayerTurn();
-        addNotification("It's Player " + board.getCurrentPlayer() + " turn", 700);
-        repaint();
+        if(!board.isPlayerAlive(board.getCurrentPlayer()) && board.isAHumanPlayerAlive()){
+            endHumanPlayerTurn();// if an human player is still alive but the current one is not: end currant turn
+        }
+        else{
+            addNotification("It's Player " + board.getCurrentPlayer() + " turn", 700);
+            repaint();
+        }
     }
 
     /**
