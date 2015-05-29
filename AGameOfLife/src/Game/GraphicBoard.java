@@ -22,18 +22,26 @@ public class GraphicBoard extends JPanel {
     protected Timer notificationTimer;
 
     /**
-     * Default constructor: load the Board:"AGameOfLife/Boards/[theBoardName]"
+     * default constructor, generate a board thanks to default options
+     */
+    public  GraphicBoard(){
+        gameOptions = new Options();
+        voidBoardInit(gameOptions.getBoardWidth(),gameOptions.getBoardHeight());
+    }
+
+    /**
+     * generate a void board of the given size (thanks to option)
+     * @param gameOptions options to use
      */
     public GraphicBoard(Options gameOptions){
-        voidBoardInit(10,10);
+        voidBoardInit(gameOptions.getBoardWidth(),gameOptions.getBoardHeight());
         this.gameOptions = gameOptions;
     }
 
-    public GraphicBoard(int width, int height, Options gameOptions){
-        voidBoardInit(width, height);
-        this.gameOptions = gameOptions;
-    }
-
+    /**
+     * @param path path of the file to load
+     * @param gameOptions options to use for that file
+     */
     public GraphicBoard(String path, Options gameOptions){
         init(new Board(path, ' ', gameOptions));
         this.gameOptions = gameOptions;
@@ -102,10 +110,18 @@ public class GraphicBoard extends JPanel {
         notificationTimer = new Timer(100, null);
     }
 
+    /**
+     * action done when a left click is detected on the board
+     * @param point point were the click was (in board coordinate)
+     */
     protected void onLeftClick(BoardPoint point){
         setSelectedCell(point);
     }
 
+    /**
+     * action done when a right click is detected on the board
+     * @param point point were the click was (in board coordinate)
+     */
     protected void onRightClick(BoardPoint point){
         if(isACellSelected()){
             if(board.playCurrentHumanTurn(new Move(selectedCell,point,0))){
@@ -114,6 +130,11 @@ public class GraphicBoard extends JPanel {
         }
     }
 
+    /**
+     * init the GraphicBoard with a empty board
+     * @param width width of the board
+     * @param height height of the board
+     */
     private void voidBoardInit(int width, int height){
         Cell[][] cellTab = new Cell[width][height];
         for (int x = 0; x < cellTab.length; x++) {
@@ -290,6 +311,11 @@ public class GraphicBoard extends JPanel {
         return (getHeight()-cellHeight)/2;
     }
 
+    /**
+     * show the given text in the center of the board
+     * @param text the text that will be shown on the board
+     * @param msTime time before the message disappear (micro second)
+     */
     public void addNotification(String text, int msTime){
         notificationTimer.stop();
         ActionListener taskPerformer = new ActionListener() {
@@ -311,6 +337,9 @@ public class GraphicBoard extends JPanel {
         }*/
     }
 
+    /**
+     * do all the stuff needed to go to the next turn
+     */
     public void endHumanPlayerTurn(){
         addNotification("AI is thinking...", 1000);
         unselectCell();
@@ -332,11 +361,21 @@ public class GraphicBoard extends JPanel {
         return new Point(getAbscissaOrigin(),getOrdinateOrigin());
     }
 
+    /**
+     * load a board form a file
+     * @param path path of the file
+     * @param sep separator between the cells (default is ' ')
+     */
     public void setBoardFromFile(String path, char sep){
         init(new Board(path,sep,gameOptions));
         repaint();
     }
 
+    /**
+     * save the board to the given path
+     * @param path path where the file will be written
+     * @param sep separator between the cells (default is ' ')
+     */
     public void saveBoardToFile(String path, char sep){
         board.writeBoardToFile(path, sep);
     }

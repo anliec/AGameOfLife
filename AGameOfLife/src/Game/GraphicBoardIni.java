@@ -17,12 +17,6 @@ public class GraphicBoardIni extends GraphicBoard {
         init(humanPlayerTeam);
     }
 
-    public GraphicBoardIni(int width, int height, int humanPlayerTeam, int numberOfCell, Options gameOptions){
-        super(width, height, gameOptions);
-        numberOfCellToPlace = numberOfCell;
-        init(humanPlayerTeam);
-    }
-
     public GraphicBoardIni(Board sourceBoard,int humanPlayerTeam, int numberOfCell){
         super(sourceBoard);
         numberOfCellToPlace = numberOfCell;
