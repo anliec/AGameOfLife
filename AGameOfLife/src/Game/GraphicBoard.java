@@ -2,10 +2,7 @@ package Game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 /**
  * The Graphic Board contains the board plus some graphic and event elements
@@ -21,6 +18,8 @@ public class GraphicBoard extends JPanel {
     protected int squareSize;
     protected BoardPoint selectedCell;
     protected Options gameOptions;
+    protected String notificationText;
+    protected Timer notificationTimer;
 
     /**
      * Default constructor: load the Board:"AGameOfLife/Boards/[theBoardName]"
@@ -36,7 +35,7 @@ public class GraphicBoard extends JPanel {
     }
 
     public GraphicBoard(String path, Options gameOptions){
-        init(new Board(path, ' ',gameOptions));
+        init(new Board(path, ' ', gameOptions));
         this.gameOptions = gameOptions;
     }
 
@@ -66,7 +65,7 @@ public class GraphicBoard extends JPanel {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                switch (mouseEvent.getButton()){
+                switch (mouseEvent.getButton()) {
                     case MouseEvent.BUTTON1:
                         onLeftClick(mouseToBoard(mouseEvent.getPoint()));
                         break;
@@ -99,6 +98,8 @@ public class GraphicBoard extends JPanel {
         });
         selectedCell = new BoardPoint(-1,-1);
         setSquareSize();// to be sure that squareSize is not zero
+        notificationText = "";
+        notificationTimer = new Timer(100, null);
     }
 
     protected void onLeftClick(BoardPoint point){
@@ -153,7 +154,8 @@ public class GraphicBoard extends JPanel {
      */
     public void unselectCell(){
         selectedCell.setY(-1);
-        selectedCell.setY(-1);
+        selectedCell.setX(-1);
+        repaint();
     }
 
     /**
@@ -216,6 +218,26 @@ public class GraphicBoard extends JPanel {
             g2d.setColor(new Color(0, 200, 0));
             g2d.drawRect(origin.x + selectedCell.getX() * squareSize, origin.y + selectedCell.getY() * squareSize, squareSize, squareSize);
         }
+        if(!notificationText.equals("")){
+            //some calculation
+            Font font = g.getFont();
+            font = new Font(font.getName(),font.getStyle(),30);
+            g.setFont(font);
+            FontMetrics fm = g.getFontMetrics();
+            int textWidth = fm.stringWidth(notificationText);
+            int textHeight = fm.getHeight();
+            int textX = (int)(getSize().getWidth()/2 - textWidth/2);
+            int textY = (int)(getSize().getHeight()/2-textHeight/2);
+            //draw background
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+            g2d.setColor(Color.black);
+            g2d.fillRect(textX-20, textY-textHeight-10, textWidth + 40, textHeight + 40);
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+            //draw notification text
+            g2d.setColor(Color.white);
+            g2d.drawString(notificationText, textX, textY);
+            System.out.println(notificationText);
+        }
     }
 
     /**
@@ -266,6 +288,35 @@ public class GraphicBoard extends JPanel {
     private int getOrdinateOrigin(){
         int cellHeight= squareSize * board.getHeight();
         return (getHeight()-cellHeight)/2;
+    }
+
+    public void addNotification(String text, int msTime){
+        notificationTimer.stop();
+        ActionListener taskPerformer = new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                notificationText="";
+                repaint();
+            }
+        };
+        notificationTimer = new Timer(msTime ,taskPerformer);
+        notificationTimer.setRepeats(false);
+        notificationTimer.start();
+        notificationText = text;
+        repaint();
+        /*try{// try to sleep 10ms in order to allow a repaint of the board
+            Thread.sleep(10);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }*/
+    }
+
+    public void endHumanPlayerTurn(){
+        addNotification("AI is thinking...", 1000);
+        unselectCell();
+        board.endHumanPlayerTurn();
+        addNotification("It's Player " + board.getCurrentPlayer() + " turn", 700);
+        repaint();
     }
 
     /**

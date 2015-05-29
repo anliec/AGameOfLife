@@ -32,14 +32,8 @@ public class OptionWindow extends JFrame {
     private ButtonGroup[] PlayerOptionGroup = new ButtonGroup[4];
 
     FlowLayout C;//ComboBox
-    FlowLayout P1;
-    FlowLayout P2;
-    FlowLayout P3;
-    FlowLayout P4;
-    //JFrame frame= new JFrame("JSpinner");//
 
-
-    BoxLayout gridLayoutPrincipal;
+    BoxLayout boxLayoutPrincipal;
 
     LinkedList<Boolean> Players;
     int numberOfPlayers;
@@ -48,11 +42,11 @@ public class OptionWindow extends JFrame {
     Integer numberofcell;
 
     public OptionWindow() {
-        setSize(new Dimension(1200, 900));
         setMinimumSize(new Dimension(275, 300));
+        setMaximumSize(new Dimension(350, 400));
         setTitle("Options");
-        gridLayoutPrincipal = new BoxLayout(this.getContentPane(),BoxLayout.PAGE_AXIS);
-        getContentPane().setLayout(gridLayoutPrincipal);
+        boxLayoutPrincipal = new BoxLayout(this.getContentPane(),BoxLayout.PAGE_AXIS);
+        getContentPane().setLayout(boxLayoutPrincipal);
 
         C = new FlowLayout(2);
         ComboPanel = new JPanel();

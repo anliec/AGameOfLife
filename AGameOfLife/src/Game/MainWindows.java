@@ -227,12 +227,12 @@ public class MainWindows extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if ("EndOfHumanTurn".equals(actionEvent.getActionCommand())) {
-                    boardWidget.unselectCell();
-                    boardWidget.getBoard().endHumanPlayerTurn();
-                    boardWidget.repaint();
-                    if(!board.isAHumanPlayerAlive()){
+                    btNextGeneration.setEnabled(false);
+                    boardWidget.endHumanPlayerTurn();
+                    btNextGeneration.setEnabled(true);
+                    /*if(!boardWidget.getBoard().isAHumanPlayerAlive()){ // /!\ bug on isAHumanPlayerAlive()
                         EndOfGame();
-                    }
+                    }*/
                 }
                 title = "A Game of Life";
                 title += " - Player : " + boardWidget.getBoard().getCurrentPlayer();
@@ -244,6 +244,8 @@ public class MainWindows extends JFrame {
     }
 
     public void EndOfGame(){
-
+        boardWidget.addNotification("Game Over", 10000);
+        boardWidget.repaint();
+        btNextGeneration.setEnabled(false);
     }
 }
