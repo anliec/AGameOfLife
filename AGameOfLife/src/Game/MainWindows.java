@@ -35,6 +35,10 @@ public class MainWindows extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        //set icone
+        ImageIcon img = new ImageIcon("Images/AGOL.png");
+        this.setIconImage(img.getImage());
+
         ///set UI
         gameOptions = new Options();
         menuBar = new JMenuBar();
@@ -56,13 +60,13 @@ public class MainWindows extends JFrame {
      * initialisation of the menu bar of the main window
      */
     private void initMenuBar() {
-        JMenu fileMenu = new JMenu("Fichier"),
-                toolsMenu = new JMenu("Outils"),
-                helpMenu = new JMenu("A Propos");
-        JMenuItem newMenuItem = new JMenuItem("Nouvelle Simulation"),
-                openMenuItem = new JMenuItem("Ouvrir"),
-                saveMenuItem = new JMenuItem("Sauvegarder"),
-                closeMenuItem = new JMenuItem("Fermer"),
+        JMenu fileMenu = new JMenu("File"),
+                toolsMenu = new JMenu("Tools"),
+                helpMenu = new JMenu("About");
+        JMenuItem newMenuItem = new JMenuItem("New Game"),
+                openMenuItem = new JMenuItem("Open..."),
+                saveMenuItem = new JMenuItem("Save as..."),
+                closeMenuItem = new JMenuItem("Exit"),
                 optionsMenuItem = new JMenuItem("Options"),
                 aboutMenuItem = new JMenuItem("?");
         closeMenuItem.addActionListener(new ActionListener() {

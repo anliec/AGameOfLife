@@ -10,6 +10,9 @@ import java.awt.event.*;
  */
 public class GraphicBoard extends JPanel {
 
+    /**
+     * @return the Board used by GraphicBoard
+     */
     public Board getBoard() {
         return board;
     }

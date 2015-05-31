@@ -58,9 +58,6 @@ public class Team implements Cloneable {
             playIA();
             played = true;
         }
-        else {
-            
-        }
     }
     
     /**
