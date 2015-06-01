@@ -26,18 +26,20 @@ import java.io.IOException;
 
 public class AboutWindow extends JFrame {
     protected JLabel labelTitle = new JLabel("A Game Of Life");
-    protected JLabel labelAutors = new JLabel("<html><h3>team AGOL:</h3>"+
-            "<p><br>Quentin BAPAUME"+
-            "<br>Edern HAUMONT"+
-            "<br>Youssef MHAMEDI"+
-            "<br>Nicolas SIX</p></html>");
+    protected JLabel labelAutors1 = new JLabel("team AGOL:");
+    protected JLabel labelAutors2 = new JLabel("Quentin BAPAUME, Edern HAUMONT, Youssef MHAMEDI, Nicolas SIX");
+
     protected JLabel labelLink = new JLabel("www.github.com/anliec/AGameOfLife");
     protected JLabel iconeLabel;
+    protected JLabel licenseLabel= new JLabel("Copyright © 2015 Team AGOL");
+    protected JLabel licenseLabel2= new JLabel("This program is distributed in the hope that it will be useful, " +
+            "but WITHOUT ANY WARRANTY");
+    protected JLabel licenseLabel3 = new JLabel("See the GNU General Public License for more details.");
     
     public AboutWindow() {
         setTitle("About us");
-        this.setPreferredSize(new Dimension(500,480));
-        this.setMinimumSize(new Dimension(500, 480));
+        this.setPreferredSize(new Dimension(500,450));
+        this.setMinimumSize(new Dimension(500, 450));
         this.setResizable(false);
         Container pane = this.getContentPane();
         BoxLayout layout = new BoxLayout(pane, BoxLayout.PAGE_AXIS);
@@ -53,17 +55,30 @@ public class AboutWindow extends JFrame {
         Font font = labelTitle.getFont();
         labelTitle.setFont(new Font(font.getName(),Font.BOLD,30));
         labelLink.setFont(new Font(font.getName(),Font.ITALIC,20));
+        labelAutors1.setFont(new Font(font.getName(),Font.BOLD,10));
+        labelAutors2.setFont(new Font(font.getName(), Font.PLAIN, 10));
+        licenseLabel.setFont(new Font(font.getName(),Font.ITALIC,10));
+        licenseLabel2.setFont(new Font(font.getName(),Font.ITALIC,10));
+        licenseLabel3.setFont(new Font(font.getName(),Font.ITALIC,10));
 
         labelTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         iconeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         labelLink.setAlignmentX(Component.CENTER_ALIGNMENT);
-        labelAutors.setAlignmentX(Component.LEFT_ALIGNMENT);
-        labelAutors.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+        labelAutors1.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelAutors2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        licenseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        licenseLabel2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        licenseLabel3.setAlignmentX(Component.CENTER_ALIGNMENT);
         pane.add(labelTitle);
         pane.add(iconeLabel);
-        pane.add(Box.createHorizontalGlue());
         pane.add(labelLink);
-        pane.add(labelAutors);
+        pane.add(Box.createRigidArea(new Dimension(20,20)));
+        pane.add(labelAutors1);
+        pane.add(labelAutors2);
+        pane.add(Box.createRigidArea(new Dimension(20,20)));
+        pane.add(licenseLabel);
+        pane.add(licenseLabel2);
+        pane.add(licenseLabel3);
         pack();
         setVisible(true);
     }
