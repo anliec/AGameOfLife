@@ -276,7 +276,6 @@ public class GraphicBoard extends JPanel {
             //draw notification text
             g2d.setColor(Color.white);
             g2d.drawString(notificationText, textX, textY);
-            System.out.println(notificationText);
         }
     }
 

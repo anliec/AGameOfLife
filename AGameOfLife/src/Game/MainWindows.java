@@ -154,7 +154,6 @@ public class MainWindows extends JFrame {
      * manage the initialisation of a new board
      */
     public void initialisationOfTheBoard(){
-        System.out.println("init board");
         //board initialisation:
         gameOptions = optionWindow.getOptions();
         Board board = new Board(gameOptions);
@@ -228,7 +227,6 @@ public class MainWindows extends JFrame {
      * @param board the board which will be showed at the first turn
      */
     public void setPlayMode(final Board board){
-        System.out.println("play mode");
         try{
             remove(boardWidget);
             remove(btNextGeneration);

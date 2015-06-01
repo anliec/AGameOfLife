@@ -155,7 +155,7 @@ public class OptionWindow extends JFrame {
         numberofcell = 0;
         SpinnerModel model1 = new SpinnerNumberModel(5, 5, 10, 1);
         CellNumber = new JSpinner(model1);
-        JLabel label1 = new JLabel("Number of cells : ");
+        JLabel label1 = new JLabel("Number of cells (beginning): ");
         JPanel panel1 = new JPanel();
         panel1.setLayout(new BoxLayout(panel1,BoxLayout.LINE_AXIS));
         panel1.add(Box.createHorizontalGlue());
@@ -168,8 +168,8 @@ public class OptionWindow extends JFrame {
         SpinnerModel model3 = new SpinnerNumberModel(10, 10, 20, 1);
         BoardHeight = new JSpinner(model2);
         BoardWidth = new JSpinner(model3);
-        JLabel labelBoardWdith = new JLabel("board width : ");
-        JLabel labelBoardHeight = new JLabel("board height : ");
+        JLabel labelBoardWdith = new JLabel("board height : ");
+        JLabel labelBoardHeight = new JLabel("board width : ");
         JPanel panelBoardWdith = new JPanel();
         JPanel panelBoardHeight = new JPanel();
         panelBoardHeight.setLayout(new BoxLayout(panelBoardHeight,BoxLayout.LINE_AXIS));
