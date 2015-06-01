@@ -19,8 +19,8 @@ public class AboutWindow extends JFrame {
     
     public AboutWindow() {
         setTitle("About us");
-        this.setPreferredSize(new Dimension(500,450));
-        this.setMinimumSize(new Dimension(500, 450));
+        this.setPreferredSize(new Dimension(500,490));
+        this.setMinimumSize(new Dimension(500, 490));
         this.setResizable(false);
         Container pane = this.getContentPane();
         BoxLayout layout = new BoxLayout(pane, BoxLayout.PAGE_AXIS);

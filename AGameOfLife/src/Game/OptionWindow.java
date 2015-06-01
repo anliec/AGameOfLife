@@ -211,21 +211,31 @@ public class OptionWindow extends JFrame {
 
     public void BoutonOK() {
 
+
+
         Players = new LinkedList<>();
         Players.add(false); //dead team cell
+        boolean isOptionOK = false;
 
         for (int i = 0; i < PlayerOption.length; i+=2) {
             if(numberOfPlayers > i/2){
                 Players.add(!PlayerOption[i].isSelected());
+                if(PlayerOption[i].isSelected()){
+                    isOptionOK = true;
+                }
             }
         }
 
-        Op.setTeamsIA(Players);
-        Op.setNumberOfCellBeginning((int) CellNumber.getValue());
-        Op.setBoardWidth((int) BoardWidth.getValue());
-        Op.setBoardHeight((int) BoardHeight.getValue());
-        System.out.println("number of teams:"+(Players.size()-1));
-        setVisible(false);
+        if(!isOptionOK){
+            JOptionPane.showMessageDialog(this,"Please select one or more human player","No human player",JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            Op.setTeamsIA(Players);
+            Op.setNumberOfCellBeginning((int) CellNumber.getValue());
+            Op.setBoardWidth((int) BoardWidth.getValue());
+            Op.setBoardHeight((int) BoardHeight.getValue());
+            setVisible(false);
+        }
     }//boutonOK
 
     public class ItemAction2 implements ActionListener {
