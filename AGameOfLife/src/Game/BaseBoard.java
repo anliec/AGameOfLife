@@ -137,9 +137,9 @@ public class BaseBoard implements Cloneable {
             for (int x = 0; x < cellBoard.length; x++) {
                 for (int y = 0; y < cellBoard[0].length; y++) {
                     writer.print(cellBoard[x][y]);
-                    writer.print(sep);
+                    if(y!=cellBoard[0].length-1)writer.print(sep);
                 }
-                writer.println();
+                if (x!=cellBoard.length-1)writer.println();
             }
             writer.close();
         }
